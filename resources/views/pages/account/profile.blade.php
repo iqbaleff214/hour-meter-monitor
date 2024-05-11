@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.content')
 
 @section('content')
 <h4 class="py-3 mb-4"><span class="text-muted fw-light">Akun /</span> Profil</h4>
