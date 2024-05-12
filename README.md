@@ -5,54 +5,71 @@
         </a>
     </p>
 
- [![GitHub Stars](https://img.shields.io/github/stars/404NotFoundIndonesia/laravel-11-sneat-template.svg)](https://github.com/404NotFoundIndonesia/laravel-11-sneat-template/stargazers)
- [![GitHub license](https://img.shields.io/github/license/404NotFoundIndonesia/laravel-11-sneat-template)](https://github.com/404NotFoundIndonesia/laravel-11-sneat-template/blob/main/LICENSE)
+ [![GitHub Stars](https://img.shields.io/github/stars/iqbaleff214/hour-meter-tracking-system.svg)](https://github.com/iqbaleff214/hour-meter-tracking-system/stargazers)
+ [![GitHub license](https://img.shields.io/github/license/iqbaleff214/hour-meter-tracking-system)](https://github.com/iqbaleff214/hour-meter-tracking-system/blob/main/LICENSE)
  
 </div>
 
-# Laravel 11 Sneat Template
+# Hour Meter Tracking System
 
-This is a Laravel 11 template designed to accelerate web application development by integrating the Sneat dashboard template and Laravel Breeze authentication.
+Pengelolaan unit alat berat, khususnya dalam industri perkebunan kelapa sawit seperti yang dilakukan oleh PT Ehsan Agro Sentosa, membutuhkan sistem yang efisien dan terpadu. Dengan menerapkan sistem informasi yang terintegrasi, dapat membantu dalam proses penginputan data jam operasional (_hour meter_) unit di setiap anak perusahaan PT EAS.
 
-## Get Started
+Beberapa tantangan yang dihadapi oleh PT Ehsan Agro Sentosa adalah:
+1. Penggunaan sistem debit cast oleh PT Ehsan Agro Sentosa.
+2. Ketidaksempurnaan dalam operasional: Proses manual memerlukan banyak waktu dan tenaga. Pengelola harus memeriksa ketersediaan suku cadang untuk setiap unit sebelum melakukan servis berkala.
 
-### Get the Source Code
-Of course, you need to put this code on your computer first. There are two ways to do this: by __downloading the project zip file__ or __by using Git (recommended)__.
+Untuk meningkatkan kualitas layanan dan efisiensi operasional, diperlukan pengembangan sistem informasi manajemen untuk memasukkan data jam operasional. Sistem ini akan membantu PT EAS dan anak perusahaannya. Lokasi penelitian berada di Jalan Kodeco No 09, Gunung Antasari, Kecamatan Simpang Empat, Kabupaten Tanah Bumbu, Kalimantan Selatan 72211.
 
-1. **Download the Project Zip**
+Penelitian ini diharapkan dapat memberikan kontribusi positif bagi PT Ehsan Agro Sentosa dan industri perkebunan secara keseluruhan. Dengan sistem informasi yang terintegrasi, pengelolaan jam operasional akan lebih efisien, kesalahan dapat diminimalkan, dan periode servis dapat ditingkatkan. Dengan demikian, penelitian ini akan difokuskan pada "Pembuatan _Hour Meter Tracking System_ Berbasis Web Menggunakan Laravel Pada PT EAS".
 
-    You can click on [this link](https://github.com/404NotFoundIndonesia/laravel-11-sneat-template/archive/refs/heads/main.zip) to download the zip file of this project.
+## Memulai
+
+### Prasyarat
+
+- Anda memerlukan [PHP](https://www.php.net/downloads) untuk menjalankannya, dengan versi yang terinstal minimal **PHP 8.3.4**. Pastikan Anda juga dapat mengakses PHP melalui command line dengan menambahkannya ke [environment variable path](https://rgrahardi.medium.com/pengaturan-path-php-dan-composer-di-environment-variables-windows-10-e1e22a637618).
+- Pastikan [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos) juga terinstal dan dapat diakses melalui command line.
+- Pastikan Anda juga telah menginstall [MySQL](https://dev.mysql.com/downloads/mysql/).
+- Direkomendasikan untuk menginstall [Git](https://git-scm.com/downloads) untuk manajemen kode yang lebih baik.
+
+### Mengunduh _Source Code_
+Anda perlu mengunduh atau menggunakan Git untuk mendapatkan _source code_ ini di komputer Anda. Ada dua cara untuk melakukannya, silakan pilih salah satu.
+
+1. **Unduh File Zip Proyek**
+
+    Anda dapat klik [tautan ini](https://github.com/iqbaleff214/hour-meter-tracking-system/archive/refs/heads/main.zip) untuk mengunduh file zip dari proyek ini.
 
 2. **Git Clone**
 
-    Make sure that you have installed git. Open the directory where you want to place the source code in the terminal. Then, run the following command:
+    Pastikan Anda telah menginstall git. Buka direktori di terminal tempat Anda ingin menaruh _source code_. Kemudian, jalankan perintah berikut:
     ```shell
-    git clone git@github.com:404NotFoundIndonesia/laravel-11-sneat-template.git
+    git clone git@github.com:iqbaleff214/hour-meter-tracking-system.git
     ```
 
-### Install Dependencies and Setup
+### Instal Dependensi
 
-Make sure __this project is open in your command line interface__. To confirm your current active directory in the terminal, use the following command: 
+Pastikan proyek ini sudah terbuka di command line Anda. Untuk memastikan direktori aktif sekarang Anda di terminal, gunakan perintah berikut:
 ```shell
 pwd
 ```
 
-To install backend dependencies, use the following command:
+Untuk menginstall dependensi backend, gunakan perintah berikut:
 ```shell
-composer install
+composer setup
 ```
 
-Use the following command to connect the application to the storage:
+Perintah di atas cukup dijalankan __satu kali__ saja!
+
+### Cara Menjalankan
+Anda harus membuka dua buah command line untuk menjalankan proyek ini. Masing-masing digunakan untuk bagian backend dan frontend.
+
+Untuk menjalankan server backend, gunakan perintah berikut:
 ```shell
-php artisan storage:link
+php artisan serve
 ```
 
-## Reference
+Buka http://localhost:8000 di web browser Anda untuk mengakses _Hour Meter Tracking System_.
 
-- [Laravel](https://github.com/laravel/laravel)
-- [Breeze](https://github.com/laravel/breeze)
-- [Sneat](https://github.com/themeselection/sneat-bootstrap-html-admin-template-free)
 
 ## License
 
-__Laravel 11 Sneat Template__ is open-sourced software licensed under the [MIT license](https://github.com/404NotFoundIndonesia/laravel-11-sneat-template?tab=MIT-1-ov-file).
+__Hour Meter Tracking System__ adalah perangkat lunak _open-source_ yang dilisensikan di bawah lisensi [MIT license](https://github.com/iqbaleff214/hour-meter-tracking-system?tab=MIT-1-ov-file).
