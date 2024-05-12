@@ -22,6 +22,36 @@
           "slug": "account.password.edit"
         }
       ]
+    },
+    {
+      "menuHeader": "Data Utama"
+    },
+    {
+        "url": "subsidiary.index",
+        "name": "Anak Perusahaan",
+        "icon": "menu-icon tf-icons bx bx-buildings",
+        "slug": "subsidiary.*"
+    },
+    {
+        "url": "category.index",
+        "name": "Kategori Unit",
+        "icon": "menu-icon tf-icons bx bx-grid-alt",
+        "slug": "category.*"
+    },
+    {
+        "url": "equipment.index",
+        "name": "Unit Peralatan",
+        "icon": "menu-icon tf-icons bx bx-cog",
+        "slug": "equipment.*"
+    },
+    {
+        "menuHeader": "Laporan"
+    },
+    {
+        "url": "report.hour-meter",
+        "name": "Hour Meter",
+        "icon": "menu-icon tf-icons bx bx-hourglass",
+        "slug": "report.hour-meter"
     }
   ]
 }

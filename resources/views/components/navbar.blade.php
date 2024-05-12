@@ -33,11 +33,6 @@
                     <li>
                         <a class="dropdown-item" href="#">
                             <div class="d-flex">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar avatar-online">
-                                        <img src="{{ auth()->user()->avatar_url }}" alt class="w-px-40 h-px-40 rounded-circle" />
-                                    </div>
-                                </div>
                                 <div class="flex-grow-1">
                                     <span class="fw-medium d-block">{{ auth()->user()->name }}</span>
                                     <small class="text-muted">-</small>

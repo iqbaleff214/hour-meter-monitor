@@ -7,7 +7,7 @@
         <div class="d-flex align-items-end row">
           <div class="col-sm-7">
             <div class="card-body">
-              <h5 class="card-title text-primary">Congratulations John! 🎉</h5>
+              <h5 class="card-title text-primary">Selamat datang, {{ auth()->user()->name }} 🎉</h5>
               <p class="mb-4">You have done <span class="fw-medium">72%</span> more sales today. Check your new badge in your profile.</p>
 
               <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
@@ -40,8 +40,8 @@
                   </div>
                 </div>
               </div>
-              <span class="fw-semibold d-block mb-1">Profit</span>
-              <h3 class="card-title mb-2">$12,628</h3>
+              <span class="fw-semibold d-block mb-1">Unit Servis</span>
+              <h3 class="card-title mb-2">56</h3>
               <small class="text-success fw-semibold"><i class='bx bx-up-arrow-alt'></i> +72.80%</small>
             </div>
           </div>
