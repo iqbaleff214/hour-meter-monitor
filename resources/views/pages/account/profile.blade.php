@@ -18,14 +18,24 @@
             @method('patch')
             <div class="row">
               <div class="mb-3 col-md-6">
-                <label for="name" class="form-label">Nama Lengkap</label>
+                <label for="name" class="form-label">Nama Perusahaan</label>
                 <input class="form-control @error('name') is-invalid @enderror" type="text" id="name" name="name" value="{{ old('name', $user->name) }}" autofocus />
                 <span class="error invalid-feedback">{{ $errors->first('name') }}</span>
               </div>
               <div class="mb-3 col-md-6">
                 <label for="email" class="form-label">Email</label>
-                <input class="form-control @error('email') is-invalid @enderror" type="text" id="email" name="email" value="{{ old('email', $user->email) }}" placeholder="john.doe@example.com" />
+                <input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email" value="{{ old('email', $user->email) }}" placeholder="john.doe@example.com" />
                 <span class="error invalid-feedback">{{ $errors->first('email') }}</span>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="code" class="form-label">Kode Perusahaan</label>
+                <input class="form-control @error('code') is-invalid @enderror" type="text" id="code" name="code" value="{{ old('code', $user->code) }}" />
+                <span class="error invalid-feedback">{{ $errors->first('code') }}</span>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="phone" class="form-label">Telepon</label>
+                <input class="form-control @error('phone') is-invalid @enderror" type="text" id="phone" name="phone" value="{{ old('phone', $user->phone) }}" />
+                <span class="error invalid-feedback">{{ $errors->first('phone') }}</span>
               </div>
             </div>
             <div class="mt-2">

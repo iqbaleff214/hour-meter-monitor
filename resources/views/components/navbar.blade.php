@@ -35,7 +35,7 @@
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                                     <span class="fw-medium d-block">{{ auth()->user()->name }}</span>
-                                    <small class="text-muted">-</small>
+                                    <small class="text-muted text-break">{{ auth()->user()->email }}</small>
                                 </div>
                             </div>
                         </a>
