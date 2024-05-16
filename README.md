@@ -12,15 +12,15 @@
 
 # Hour Meter Tracking System
 
-Pengelolaan unit alat berat, khususnya dalam industri perkebunan kelapa sawit seperti yang dilakukan oleh PT Ehsan Agro Sentosa, membutuhkan sistem yang efisien dan terpadu. Dengan menerapkan sistem informasi yang terintegrasi, dapat membantu dalam proses penginputan data jam operasional (_hour meter_) unit di setiap anak perusahaan PT EAS.
+Pengelolaan unit alat berat, khususnya dalam industri perkebunan kelapa sawit seperti yang dilakukan oleh PT Eshan Agro Sentosa, membutuhkan sistem yang efisien dan terpadu. Dengan menerapkan sistem informasi yang terintegrasi, dapat membantu dalam proses penginputan data jam operasional (_hour meter_) unit di setiap anak perusahaan PT EAS.
 
-Beberapa tantangan yang dihadapi oleh PT Ehsan Agro Sentosa adalah:
-1. Penggunaan sistem debit cast oleh PT Ehsan Agro Sentosa.
+Beberapa tantangan yang dihadapi oleh PT Eshan Agro Sentosa adalah:
+1. Penggunaan sistem debit cast oleh PT Eshan Agro Sentosa.
 2. Ketidaksempurnaan dalam operasional: Proses manual memerlukan banyak waktu dan tenaga. Pengelola harus memeriksa ketersediaan suku cadang untuk setiap unit sebelum melakukan servis berkala.
 
 Untuk meningkatkan kualitas layanan dan efisiensi operasional, diperlukan pengembangan sistem informasi manajemen untuk memasukkan data jam operasional. Sistem ini akan membantu PT EAS dan anak perusahaannya. Lokasi penelitian berada di Jalan Kodeco No 09, Gunung Antasari, Kecamatan Simpang Empat, Kabupaten Tanah Bumbu, Kalimantan Selatan 72211.
 
-Penelitian ini diharapkan dapat memberikan kontribusi positif bagi PT Ehsan Agro Sentosa dan industri perkebunan secara keseluruhan. Dengan sistem informasi yang terintegrasi, pengelolaan jam operasional akan lebih efisien, kesalahan dapat diminimalkan, dan periode servis dapat ditingkatkan. Dengan demikian, penelitian ini akan difokuskan pada "Pembuatan _Hour Meter Tracking System_ Berbasis Web Menggunakan Laravel Pada PT EAS".
+Penelitian ini diharapkan dapat memberikan kontribusi positif bagi PT Eshan Agro Sentosa dan industri perkebunan secara keseluruhan. Dengan sistem informasi yang terintegrasi, pengelolaan jam operasional akan lebih efisien, kesalahan dapat diminimalkan, dan periode servis dapat ditingkatkan. Dengan demikian, penelitian ini akan difokuskan pada "Pembuatan _Hour Meter Tracking System_ Berbasis Web Menggunakan Laravel Pada PT EAS".
 
 ## Memulai
 

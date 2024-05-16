@@ -11,8 +11,7 @@
             <!-- Logo -->
             <div class="app-brand justify-content-center">
               <a href="{{ route('dashboard') }}" class="app-brand-link gap-2">
-                <span class="app-brand-logo demo"><img src="{{ asset('404_Black.jpg') }}" alt="404 Not Found Indonesia" width="30" style="border-radius: 150px" srcset=""></span>
-                <span class="app-brand-text text-body fw-bold fs-3">{{ config('app.name') }}</span>
+                <span class="app-brand-logo demo"><img src="{{ asset('PT_EAS.jpg') }}" alt="PT Eshan Agro Sentosa" height="75" srcset=""></span>
               </a>
             </div>
             <!-- /Logo -->

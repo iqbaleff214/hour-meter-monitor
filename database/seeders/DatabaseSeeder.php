@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'PT Ehsan Agro Sentosa',
+            'name' => 'PT Eshan Agro Sentosa',
             'email' => 'admin@eas.com',
             'role' => Role::PARENT_COMPANY,
             'code' => 'EAS',

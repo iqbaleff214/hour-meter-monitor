@@ -19,7 +19,7 @@
     <meta name="description" content="Media Pembelajaran Interaktif Berbasis Web pada Materi Fungsi Kuadrat Kelas X dengan Metode Tutorial" />
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('404_Black.jpg') }}" />
+    <link rel="shortcut icon" href="{{ asset('PT_EAS.jpg') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
