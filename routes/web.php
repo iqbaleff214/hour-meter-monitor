@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CategoryRuleController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\HourMeterController;
 use App\Http\Controllers\PageController;
@@ -20,7 +21,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resource('subsidiary', SubsidiaryController::class)->except(['show']);
-    Route::resource('category', CategoryController::class);
+    Route::resource('category', CategoryController::class)->except(['show']);
+    Route::as('category.')->prefix('category/{category}')->group(function() {
+        Route::resource('rule', CategoryRuleController::class)->except(['show']);
+    });
     Route::resource('equipment', EquipmentController::class);
 
     Route::prefix('report')->as('report.')->group(function() {
