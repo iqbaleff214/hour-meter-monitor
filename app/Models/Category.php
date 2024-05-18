@@ -19,6 +19,10 @@ class Category extends Model
         return $this->hasMany(CategoryRule::class);
     }
 
+    public function equipment(): HasMany {
+        return $this->hasMany(Equipment::class);
+    }
+
     public function scopeSearch(Builder $query, string|null $search): Builder {
         return $query->when($search, function(Builder $query) use ($search) {
             return $query->where('name', 'LIKE', $search . '%');
@@ -26,6 +30,6 @@ class Category extends Model
     }
 
     public function scopeRender(Builder $query, int $page) {
-        return $query->paginate($page)->withQueryString();
+        return $query->withCount('equipment')->paginate($page)->withQueryString();
     }
 }
