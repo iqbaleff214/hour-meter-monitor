@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::as('category.')->prefix('category/{category}')->group(function() {
         Route::resource('rule', CategoryRuleController::class)->except(['show']);
     });
-    Route::resource('equipment', EquipmentController::class);
+    Route::resource('equipment', EquipmentController::class)->except(['show']);
 
     Route::prefix('report')->as('report.')->group(function() {
         Route::get('hour-meter', [HourMeterController::class, 'index'])->name('hour-meter');
