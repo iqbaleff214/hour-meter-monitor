@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
 
     });
 
-    Route::resource('subsidiary', SubsidiaryController::class);
+    Route::resource('subsidiary', SubsidiaryController::class)->except(['show']);
     Route::resource('category', CategoryController::class);
     Route::resource('equipment', EquipmentController::class);
 
