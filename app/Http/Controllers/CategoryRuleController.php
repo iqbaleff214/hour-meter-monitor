@@ -45,7 +45,8 @@ class CategoryRuleController extends Controller
 
             return redirect()->route('category.rule.index', $category)->with('notification', ['icon' => 'success', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Berhasil menambahkan aturan servis!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Gagal menambahkan aturan servis!']);
         }
     }
@@ -71,7 +72,8 @@ class CategoryRuleController extends Controller
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Berhasil mengubah aturan servis!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Gagal mengubah aturan servis!']);
         }
     }
@@ -83,9 +85,11 @@ class CategoryRuleController extends Controller
     {
         try {
             $rule->delete();
+
             return back()->with('notification', ['icon' => 'success', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Berhasil menghapus data aturan servis!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Gagal menghapus data aturan servis!']);
         }
     }

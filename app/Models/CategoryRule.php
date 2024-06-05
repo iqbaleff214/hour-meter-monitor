@@ -15,17 +15,20 @@ class CategoryRule extends Model
         'category_id', 'max_value', 'service_plan',
     ];
 
-    public function category(): BelongsTo {
+    public function category(): BelongsTo
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function scopeSearch(Builder $query, string|null $search): Builder {
-        return $query->when($search, function(Builder $query) use ($search) {
-            return $query->where('service_plan', 'LIKE', $search . '%');
+    public function scopeSearch(Builder $query, ?string $search): Builder
+    {
+        return $query->when($search, function (Builder $query) use ($search) {
+            return $query->where('service_plan', 'LIKE', $search.'%');
         });
     }
 
-    public function scopeRender(Builder $query, int $page) {
+    public function scopeRender(Builder $query, int $page)
+    {
         return $query->orderBy('max_value', 'asc')->paginate($page)->withQueryString();
     }
 }

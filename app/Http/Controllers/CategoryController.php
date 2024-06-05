@@ -41,7 +41,8 @@ class CategoryController extends Controller
 
             return redirect()->route('category.index')->with('notification', ['icon' => 'success', 'title' => 'Kategori Unit', 'message' => 'Berhasil menambahkan kategori unit!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Kategori Unit', 'message' => 'Gagal menambahkan kategori unit!']);
         }
     }
@@ -66,7 +67,8 @@ class CategoryController extends Controller
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Kategori Unit', 'message' => 'Berhasil mengubah kategori unit!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Kategori Unit', 'message' => 'Gagal mengubah kategori unit!']);
         }
     }
@@ -78,9 +80,11 @@ class CategoryController extends Controller
     {
         try {
             $category->delete();
+
             return back()->with('notification', ['icon' => 'success', 'title' => 'Kategori Unit', 'message' => 'Berhasil menghapus data kategori unit!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Kategori Unit', 'message' => 'Gagal menghapus data kategori unit!']);
         }
     }

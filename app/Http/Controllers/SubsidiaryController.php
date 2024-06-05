@@ -44,7 +44,8 @@ class SubsidiaryController extends Controller
 
             return redirect()->route('subsidiary.index')->with('notification', ['icon' => 'success', 'title' => 'Anak Perusahaan', 'message' => 'Berhasil menambahkan anak perusahaan!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Anak Perusahaan', 'message' => 'Gagal menambahkan anak perusahaan!']);
         }
     }
@@ -77,7 +78,8 @@ class SubsidiaryController extends Controller
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Anak Perusahaan', 'message' => 'Berhasil mengubah anak perusahaan!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Anak Perusahaan', 'message' => 'Gagal mengubah anak perusahaan!']);
         }
     }
@@ -89,9 +91,11 @@ class SubsidiaryController extends Controller
     {
         try {
             $subsidiary->delete();
+
             return back()->with('notification', ['icon' => 'success', 'title' => 'Anak Perusahaan', 'message' => 'Berhasil menghapus data anak perusahaan!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Anak Perusahaan', 'message' => 'Gagal menghapus data anak perusahaan!']);
         }
     }

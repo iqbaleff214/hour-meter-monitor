@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\CategoryRule;
 use App\Models\Equipment;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DummySeeder extends Seeder

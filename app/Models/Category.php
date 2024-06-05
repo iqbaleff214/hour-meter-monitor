@@ -12,24 +12,28 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
-    public function rules(): HasMany {
+    public function rules(): HasMany
+    {
         return $this->hasMany(CategoryRule::class);
     }
 
-    public function equipment(): HasMany {
+    public function equipment(): HasMany
+    {
         return $this->hasMany(Equipment::class);
     }
 
-    public function scopeSearch(Builder $query, string|null $search): Builder {
-        return $query->when($search, function(Builder $query) use ($search) {
-            return $query->where('name', 'LIKE', $search . '%');
+    public function scopeSearch(Builder $query, ?string $search): Builder
+    {
+        return $query->when($search, function (Builder $query) use ($search) {
+            return $query->where('name', 'LIKE', $search.'%');
         });
     }
 
-    public function scopeRender(Builder $query, int $page) {
+    public function scopeRender(Builder $query, int $page)
+    {
         return $query->withCount('equipment')->paginate($page)->withQueryString();
     }
 }

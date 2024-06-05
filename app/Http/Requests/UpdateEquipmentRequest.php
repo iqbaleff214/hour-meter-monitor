@@ -23,12 +23,12 @@ class UpdateEquipmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'serial_number' => ['required', Rule::unique('equipment','serial_number')->ignore($this->id)],
-            'code' => ['required',],
-            'brand' => ['required',],
-            'model' => ['required',],
-            'category_id' => ['required',],
-            'user_id' => ['nullable',],
+            'serial_number' => ['required', Rule::unique('equipment', 'serial_number')->ignore($this->id)],
+            'code' => ['required'],
+            'brand' => ['required'],
+            'model' => ['required'],
+            'category_id' => ['required'],
+            'user_id' => ['nullable'],
         ];
     }
 }

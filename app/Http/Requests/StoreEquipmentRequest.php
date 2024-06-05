@@ -24,11 +24,11 @@ class StoreEquipmentRequest extends FormRequest
     {
         return [
             'serial_number' => ['required', Rule::unique('equipment', 'serial_number')],
-            'code' => ['required',],
-            'brand' => ['required',],
-            'model' => ['required',],
-            'category_id' => ['required',],
-            'user_id' => ['nullable',],
+            'code' => ['required'],
+            'brand' => ['required'],
+            'model' => ['required'],
+            'category_id' => ['required'],
+            'user_id' => ['nullable'],
         ];
     }
 }
