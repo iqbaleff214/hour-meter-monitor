@@ -1,57 +1,109 @@
 {
-  "menu": [
-    {
-      "url": "dashboard",
-      "name": "Dashboard",
-      "icon": "menu-icon tf-icons bx bx-home-circle",
-      "slug": "dashboard"
-    },
-    {
-      "name": "Akun",
-      "icon": "menu-icon tf-icons bx bx bx-user",
-      "slug": "account.*",
-      "submenu": [
+    "menu": [
         {
-          "url": "account.profile.edit",
-          "name": "Profil",
-          "slug": "account.profile.edit"
+            "url": "dashboard",
+            "name": "Dashboard",
+            "icon": "menu-icon tf-icons bx bx-home-circle",
+            "slug": "dashboard",
+            "role": [
+                "parent",
+                "subsidiary"
+            ]
         },
         {
-          "url": "account.password.edit",
-          "name": "Ganti Password",
-          "slug": "account.password.edit"
+            "name": "Akun",
+            "icon": "menu-icon tf-icons bx bx bx-user",
+            "slug": "account.*",
+            "submenu": [
+                {
+                    "url": "account.profile.edit",
+                    "name": "Profil",
+                    "slug": "account.profile.edit",
+                    "role": [
+                        "parent",
+                        "subsidiary"
+                    ]
+                },
+                {
+                    "url": "account.password.edit",
+                    "name": "Ganti Password",
+                    "slug": "account.password.edit",
+                    "role": [
+                        "parent",
+                        "subsidiary"
+                    ]
+                }
+            ],
+            "role": [
+                "parent",
+                "subsidiary"
+            ]
+        },
+        {
+            "menuHeader": "Laporan",
+            "role": [
+                "subsidiary"
+            ]
+        },
+        {
+            "url": "report.hour-meter.index",
+            "name": "Hour Meter",
+            "icon": "menu-icon tf-icons bx bx-hourglass",
+            "slug": "report.hour-meter.*",
+            "role": [
+                "subsidiary"
+            ]
+        },
+        {
+            "menuHeader": "Data Utama",
+            "role": [
+                "parent",
+                "subsidiary"
+            ]
+        },
+        {
+            "url": "subsidiary.index",
+            "name": "Anak Perusahaan",
+            "icon": "menu-icon tf-icons bx bx-buildings",
+            "slug": "subsidiary.*",
+            "role": [
+                "parent"
+            ]
+        },
+        {
+            "url": "category.index",
+            "name": "Kategori Unit",
+            "icon": "menu-icon tf-icons bx bx-grid-alt",
+            "slug": "category.*",
+            "role": [
+                "parent",
+                "subsidiary"
+            ]
+        },
+        {
+            "url": "equipment.index",
+            "name": "Unit Peralatan",
+            "icon": "menu-icon tf-icons bx bx-cog",
+            "slug": "equipment.*",
+            "role": [
+                "parent",
+                "subsidiary"
+            ]
+        },
+        {
+            "menuHeader": "Laporan",
+            "role": [
+                "parent"
+            ]
+        },
+        {
+            "url": "report.hour-meter.index",
+            "name": "Hour Meter",
+            "icon": "menu-icon tf-icons bx bx-hourglass",
+            "slug": "report.hour-meter.*",
+            "role": [
+                "parent"
+            ]
         }
-      ]
-    },
-    {
-      "menuHeader": "Data Utama"
-    },
-    {
-        "url": "subsidiary.index",
-        "name": "Anak Perusahaan",
-        "icon": "menu-icon tf-icons bx bx-buildings",
-        "slug": "subsidiary.*"
-    },
-    {
-        "url": "category.index",
-        "name": "Kategori Unit",
-        "icon": "menu-icon tf-icons bx bx-grid-alt",
-        "slug": "category.*"
-    },
-    {
-        "url": "equipment.index",
-        "name": "Unit Peralatan",
-        "icon": "menu-icon tf-icons bx bx-cog",
-        "slug": "equipment.*"
-    },
-    {
-        "menuHeader": "Laporan"
-    },
-    {
-        "url": "report.hour-meter",
-        "name": "Hour Meter",
-        "icon": "menu-icon tf-icons bx bx-hourglass",
-        "slug": "report.hour-meter"
-    }
-  ]
+    ]
 }

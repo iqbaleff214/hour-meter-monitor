@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateEquipmentRequest;
 use App\Models\Category;
 use App\Models\Equipment;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -21,7 +22,7 @@ class EquipmentController extends Controller
     public function index(Request $request): View
     {
         return view('pages.equipment.index', [
-            'equipmentAll' => Equipment::search($request->query('q'))->render(7),
+            'equipmentAll' => Equipment::owner($request->user())->search($request->query('q'))->render(7),
         ]);
     }
 
@@ -47,7 +48,8 @@ class EquipmentController extends Controller
 
             return redirect()->route('equipment.index')->with('notification', ['icon' => 'success', 'title' => 'Unit Peralatan', 'message' => 'Berhasil menambahkan unit peralatan!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Unit Peralatan', 'message' => 'Gagal menambahkan unit peralatan!']);
         }
     }
@@ -83,7 +85,8 @@ class EquipmentController extends Controller
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Unit Peralatan', 'message' => 'Berhasil mengubah unit peralatan!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Unit Peralatan', 'message' => 'Gagal mengubah unit peralatan!']);
         }
     }
@@ -95,10 +98,19 @@ class EquipmentController extends Controller
     {
         try {
             $equipment->delete();
+
             return back()->with('notification', ['icon' => 'success', 'title' => 'Unit Peralatan', 'message' => 'Berhasil menghapus data unit peralatan!']);
         } catch (Throwable $th) {
-            Log::error($this::class . ': ' . $th->getMessage());
+            Log::error($this::class.': '.$th->getMessage());
+
             return back()->with('notification', ['icon' => 'error', 'title' => 'Unit Peralatan', 'message' => 'Gagal menghapus data unit peralatan!']);
         }
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $result = Equipment::with(['subsidiary'])->owner($request->user())->search($request->query('q'))->get();
+
+        return response()->json($result);
     }
 }

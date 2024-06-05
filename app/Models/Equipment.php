@@ -16,24 +16,41 @@ class Equipment extends Model
         'last_hour_meter', 'category_id', 'user_id',
     ];
 
-    public function category(): BelongsTo {
+    public function category(): BelongsTo
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function subsidiary(): BelongsTo {
-        return $this->belongsTo(User::class);
+    public function subsidiary(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function scopeSearch(Builder $query, string|null $search): Builder {
-        return $query->when($search, function(Builder $query) use ($search) {
-            return $query->where('serial_number', $search)
-                ->orWhere('brand', 'LIKE', $search . '%')
-                ->orWhere('model', $search)
-                ->orWhere('code', $search);
+    public function scopeOwner(Builder $query, ?User $subsidiary)
+    {
+        return $query->when($subsidiary?->isSubsidiary(), function (Builder $query) use ($subsidiary) {
+            return $query->where('user_id', $subsidiary->id);
         });
     }
 
-    public function scopeRender(Builder $query, int $page) {
+    public function scopeSearch(Builder $query, ?string $search): Builder
+    {
+        return $query->when($search, function (Builder $query) use ($search) {
+            return $query->where('serial_number', 'LIKE', $search.'%')
+                ->orWhere('brand', 'LIKE', $search.'%')
+                ->orWhere('model', 'LIKE', $search.'%')
+                ->orWhere('code', 'LIKE', $search.'%')
+                ->orWhereHas('category', function (Builder $query) use ($search) {
+                    return $query->where('name', 'LIKE', $search.'%');
+                })
+                ->orWhereHas('subsidiary', function (Builder $query) use ($search) {
+                    return $query->where('name', 'LIKE', $search.'%');
+                });
+        });
+    }
+
+    public function scopeRender(Builder $query, int $page)
+    {
         return $query->with(['category', 'subsidiary'])->paginate($page)->withQueryString();
     }
 }

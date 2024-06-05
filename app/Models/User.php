@@ -57,28 +57,38 @@ class User extends Authenticatable
         ];
     }
 
-    public function avatarUrl(): Attribute {
+    public function avatarUrl(): Attribute
+    {
         return new Attribute(
-            get: fn() => 'https://ui-avatars.com/api/?name=' . $this->name,
+            get: fn () => 'https://ui-avatars.com/api/?name='.$this->name,
         );
     }
 
-    public function isParent(): bool {
+    public function isParent(): bool
+    {
         return Role::tryFrom($this->role) === Role::PARENT_COMPANY;
     }
 
-    public function scopeSubsidiary(Builder $query): Builder {
+    public function isSubsidiary(): bool
+    {
+        return Role::tryFrom($this->role) === Role::SUBSIDIARY;
+    }
+
+    public function scopeSubsidiary(Builder $query): Builder
+    {
         return $query->where('role', Role::SUBSIDIARY);
     }
 
-    public function scopeSearch(Builder $query, string|null $search): Builder {
-        return $query->when($search, function(Builder $query) use ($search) {
-            return $query->where('name', 'LIKE', $search . '%')
-                ->orWhere('email', 'LIKE', $search . '%');
+    public function scopeSearch(Builder $query, ?string $search): Builder
+    {
+        return $query->when($search, function (Builder $query) use ($search) {
+            return $query->where('name', 'LIKE', $search.'%')
+                ->orWhere('email', 'LIKE', $search.'%');
         });
     }
 
-    public function scopeRender(Builder $query, int $page) {
+    public function scopeRender(Builder $query, int $page)
+    {
         return $query->paginate($page)->withQueryString();
     }
 }
