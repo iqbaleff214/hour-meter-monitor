@@ -18,7 +18,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="email">Email</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email',$subsidiary->email) }}">
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" disabled value="{{ old('email',$subsidiary->email) }}">
                 <span class="error invalid-feedback">{{ $errors->first('email') }}</span>
             </div>
             <div class="mb-3">
