@@ -11,9 +11,10 @@
             <form action="{{ route('report.hour-meter.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
+                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                     <label class="form-label" for="title">Tanggal</label>
                     <input type="date" class="form-control @error('title') is-invalid @enderror" name="title" id="title"
-                           value="{{ old('title', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}">
+                           value="{{ old('title', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}" required>
                     <span class="error invalid-feedback">{{ $errors->first('title') }}</span>
                 </div>
                 <div class="mb-3">
@@ -24,15 +25,11 @@
                     <div class="d-flex justify-content-between">
                         <label for="" class="form-label">Unit Peralatan</label>
                         <a class="cursor-pointer" href="#" data-bs-toggle="modal"
-                           data-bs-target="#equipment-input-modal">+ Unit
-                            Peralatan</a>
+                           data-bs-target="#equipment-input-modal">
+                            + Unit Peralatan
+                        </a>
                     </div>
                     <div id="equipment-wrapper">
-                        <div class="row mb-3">
-                            <div class="col-12 col-md-4">
-
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>
@@ -93,8 +90,43 @@
             }
         });
 
+        $('#equipment-wrapper').on('change', 'input.new-hour-meter', function (e) {
+            const index = e.target.dataset.index;
+            const categoryId = selected[index].category_id;
+
+            fetch(`/category/${categoryId}/rule-search?hm=${e.target.value}`).then(res => res.json()).then(res => {
+                console.log(res);
+                $('input[name="service_plan[' + index + ']"]').val(res?.service_plan);
+            });
+
+        })
+
         submitEquipmentInput.addEventListener('click', function (e) {
             equipmentWrapper.innerHTML = '';
+            for (let i = 0; i < selected.length; i++) {
+                equipmentWrapper.innerHTML += `
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <div class="mb-3">
+                                    <input type="hidden" name="equipment_id[${i}]" value="${selected[i].id}" />
+                                    <label class="form-label" for="${`serial-number-` + i}">Serial Number</label>
+                                    <input type="text" class="form-control" id="${`serial-number-` + i}" value="${selected[i].serial_number}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label" for="${`hour-meter-` + i}">Hour Meter</label>
+                                    <input type="number" name="new_hour_meter[${i}]" required data-index="${i}" class="form-control new-hour-meter" id="${`hour-meter-` + i}" value="${selected[i].last_hour_meter}" min="${selected[i].last_hour_meter}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label" for="${`service-plan-` + i}">Detail Servis</label>
+                                    <input type="text" name="service_plan[${i}]" required class="form-control" id="${`service-plan-` + i}" value="">
+                                </div>
+                            </div>
+                        </div>`;
+            }
         });
 
         document.getElementById('equipment-input-modal').addEventListener('show.bs.modal', event => {

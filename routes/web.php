@@ -24,12 +24,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('category', CategoryController::class)->except(['show']);
     Route::as('category.')->prefix('category/{category}')->group(function () {
         Route::resource('rule', CategoryRuleController::class)->except(['show']);
+        Route::get('rule-search', [CategoryRuleController::class, 'rule'])->name('rule.search');
     });
     Route::resource('equipment', EquipmentController::class)->except(['show']);
     Route::get('api/equipment', [EquipmentController::class, 'search']);
 
     Route::prefix('report')->as('report.')->group(function () {
-        Route::resource('hour-meter', HourMeterReportController::class);
+        Route::resource('hour-meter', HourMeterReportController::class)->except(['edit', 'update']);
     });
 
     Route::as('account.')->group(function () {

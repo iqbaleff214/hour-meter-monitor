@@ -26,6 +26,11 @@ class HourMeterReport extends Model
         return $this->hasMany(HourMeterReportDetail::class);
     }
 
+    public function scopeAvailableToday(Builder $query): bool
+    {
+        return $query->whereDate('created_at', now())->count() <= 0;
+    }
+
     public function scopeOwner(Builder $query, ?User $subsidiary)
     {
         return $query->when($subsidiary?->isSubsidiary(), function (Builder $query) use ($subsidiary) {

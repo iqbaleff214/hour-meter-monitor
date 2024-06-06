@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCategoryRuleRequest;
 use App\Http\Requests\UpdateCategoryRuleRequest;
 use App\Models\Category;
 use App\Models\CategoryRule;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -28,7 +29,7 @@ class CategoryRuleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request, Category $category)
+    public function create(Request $request, Category $category): View
     {
         return view('pages.category-rule.create', [
             'category' => $category,
@@ -45,7 +46,7 @@ class CategoryRuleController extends Controller
 
             return redirect()->route('category.rule.index', $category)->with('notification', ['icon' => 'success', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Berhasil menambahkan aturan servis!']);
         } catch (Throwable $th) {
-            Log::error($this::class.': '.$th->getMessage());
+            Log::error($this::class . ': ' . $th->getMessage());
 
             return back()->with('notification', ['icon' => 'error', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Gagal menambahkan aturan servis!']);
         }
@@ -72,7 +73,7 @@ class CategoryRuleController extends Controller
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Berhasil mengubah aturan servis!']);
         } catch (Throwable $th) {
-            Log::error($this::class.': '.$th->getMessage());
+            Log::error($this::class . ': ' . $th->getMessage());
 
             return back()->with('notification', ['icon' => 'error', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Gagal mengubah aturan servis!']);
         }
@@ -88,9 +89,23 @@ class CategoryRuleController extends Controller
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Berhasil menghapus data aturan servis!']);
         } catch (Throwable $th) {
-            Log::error($this::class.': '.$th->getMessage());
+            Log::error($this::class . ': ' . $th->getMessage());
 
             return back()->with('notification', ['icon' => 'error', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Gagal menghapus data aturan servis!']);
         }
+    }
+
+    public function rule(Request $request, Category $category): JsonResponse
+    {
+        $hourMeter = (int) ($request->query('hm') ?? 0);
+        $rules = $category->rules()->orderBy('max_value', 'asc')->get();
+
+        foreach ($rules as $rule) {
+            if ($hourMeter <= (int) $rule->max_value) {
+                return response()->json($rule);
+            }
+        }
+
+        return response()->json($rules[count($rules)-1]);
     }
 }
