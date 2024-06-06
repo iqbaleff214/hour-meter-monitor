@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreHourMeterReportRequest;
-use App\Http\Requests\UpdateHourMeterReportRequest;
 use App\Models\Equipment;
 use App\Models\HourMeterReport;
 use App\Models\HourMeterReportDetail;
@@ -21,8 +20,8 @@ class HourMeterReportController extends Controller
     public function index(Request $request): View
     {
         return view('pages.hour-meter.index', [
-            'reports' => HourMeterReport::query()->search($request->query('q'))->paginate(7)->withQueryString(),
-            'submitted' => HourMeterReport::query()->availableToday(),
+            'reports' => HourMeterReport::owner($request->user())->search($request->query('q'))->paginate(7)->withQueryString(),
+            'submitted' => HourMeterReport::query()->availableToday($request->user()),
         ]);
     }
 

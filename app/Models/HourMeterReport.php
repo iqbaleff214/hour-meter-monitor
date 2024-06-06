@@ -26,9 +26,11 @@ class HourMeterReport extends Model
         return $this->hasMany(HourMeterReportDetail::class);
     }
 
-    public function scopeAvailableToday(Builder $query): bool
+    public function scopeAvailableToday(Builder $query, User|null $user): bool
     {
-        return $query->whereDate('created_at', now())->count() <= 0;
+        return $query->when($user, function (Builder $query, User $user) {
+                return $query->where('user_id', $user->id);
+            })->whereDate('created_at', now())->count() <= 0 && $user?->isSubsidiary();
     }
 
     public function scopeOwner(Builder $query, ?User $subsidiary)
@@ -41,7 +43,11 @@ class HourMeterReport extends Model
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query) use ($search) {
-            return $query->where('title', 'LIKE', '%'.$search.'%');
+            return $query
+                ->whereHas('subsidiary', function (Builder $query) use ($search) {
+                    return $query->where('name', 'LIKE', '%' . $search . '%');
+                })
+                ->orWhere('title', 'LIKE', '%' . $search . '%');
         });
     }
 
