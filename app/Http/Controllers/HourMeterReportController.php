@@ -20,7 +20,7 @@ class HourMeterReportController extends Controller
     public function index(Request $request): View
     {
         return view('pages.hour-meter.index', [
-            'reports' => HourMeterReport::owner($request->user())->search($request->query('q'))->paginate(7)->withQueryString(),
+            'reports' => HourMeterReport::owner($request->user())->latest('created_at')->search($request->query('q'))->paginate(7)->withQueryString(),
             'submitted' => HourMeterReport::query()->availableToday($request->user()),
         ]);
     }
