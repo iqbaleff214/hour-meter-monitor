@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('api/equipment', [EquipmentController::class, 'search']);
 
     Route::prefix('report')->as('report.')->group(function () {
+        Route::get('hour-meter/{hour_meter}/export', [HourMeterReportController::class, 'export'])->name('hour-meter.export');
         Route::resource('hour-meter', HourMeterReportController::class)->except(['edit', 'update']);
     });
 

@@ -29,6 +29,7 @@
                 <tr>
                     <th>Tanggal</th>
                     <th>Pelapor</th>
+                    <th>Jumlah Unit Peralatan</th>
                     <th width="15px"></th>
                 </tr>
                 </thead>
@@ -39,12 +40,13 @@
                             <a href="{{ route('report.hour-meter.show', $report->id) }}">{{ $report->created_at->isoFormat('Y-MM-DD') }}</a>
                         </td>
                         <td>{{ $report->subsidiary?->name ?? '-' }}</td>
+                        <td>{{ count($report->details) }}</td>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                         data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                 <div class="dropdown-menu">
-                                    {{--                                    <a class="dropdown-item" href="{{ route('report.edit', $report->id) }}"><i class="bx bx-edit-alt me-1"></i> Edit</a>--}}
+                                    <a class="dropdown-item" href="{{ route('report.hour-meter.export', $report->id) }}" download="{{ $report->created_at->isoFormat('Y-MM-DD') . '_' . $report->subsidiary?->name . '.csv' }}"><i class="bx bx-download me-1"></i> Export CSV</a>
                                     <form action="{{ route('report.hour-meter.destroy', $report->id) }}" method="post"
                                           onsubmit="confirmSubmit(event, this)">
                                         @csrf

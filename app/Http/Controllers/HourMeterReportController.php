@@ -6,11 +6,14 @@ use App\Http\Requests\StoreHourMeterReportRequest;
 use App\Models\Equipment;
 use App\Models\HourMeterReport;
 use App\Models\HourMeterReportDetail;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class HourMeterReportController extends Controller
 {
@@ -20,7 +23,7 @@ class HourMeterReportController extends Controller
     public function index(Request $request): View
     {
         return view('pages.hour-meter.index', [
-            'reports' => HourMeterReport::owner($request->user())->latest('created_at')->search($request->query('q'))->paginate(7)->withQueryString(),
+            'reports' => HourMeterReport::with(['details'])->owner($request->user())->latest('created_at')->search($request->query('q'))->paginate(7)->withQueryString(),
             'submitted' => HourMeterReport::query()->availableToday($request->user()),
         ]);
     }
@@ -65,7 +68,7 @@ class HourMeterReportController extends Controller
             HourMeterReportDetail::insert($reportDetail);
 
             for ($i = 0; $i < count($equipments); $i++) {
-                Equipment::find($equipments[$i])->update(['last_hour_meter' => (int) $hourMeters[$i]]);
+                Equipment::find($equipments[$i])->update(['last_hour_meter' => (int)$hourMeters[$i]]);
             }
 
             DB::commit();
@@ -84,9 +87,20 @@ class HourMeterReportController extends Controller
      */
     public function show(HourMeterReport $hour_meter): View
     {
-        $hour_meter->load(['details', 'details.equipment']);
+        $hour_meter->load(['details', 'details.equipment', 'details.equipment.category']);
+
+        $details = [];
+        foreach ($hour_meter->details as $detail) {
+            $category = $detail->equipment->category->name;
+            if (!isset($details[$category])) {
+                $details[$category] = [];
+            }
+            $details[$category][] = $detail;
+        }
+
         return view('pages.hour-meter.show', [
             'report' => $hour_meter,
+            'details' => $details,
         ]);
     }
 
@@ -100,9 +114,68 @@ class HourMeterReportController extends Controller
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Hour Meter', 'message' => 'Berhasil menghapus laporan hour meter!']);
         } catch (\Throwable $th) {
-            Log::error($this::class.': '.$th->getMessage());
+            Log::error($this::class . ': ' . $th->getMessage());
 
             return back()->with('notification', ['icon' => 'error', 'title' => 'Hour Meter', 'message' => 'Gagal menghapus laporan hour meter!']);
+        }
+    }
+
+    public function export(HourMeterReport $hour_meter): StreamedResponse|RedirectResponse
+    {
+        try {
+            $filename = $hour_meter->created_at->isoFormat('Y-MM-DD') . '_' . $hour_meter->subsidiary?->name . '.csv';
+            $headers = [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => "attachment; filename=\"$filename\"",
+                'Pragma' => 'no-cache',
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Expires' => '0',
+            ];
+
+            return response()->stream(function () use ($hour_meter) {
+                $handle = fopen('php://output', 'w');
+
+                fputcsv($handle, [
+                    'Kategori',
+                    'No',
+                    'Jenis Alat',
+                    'Equipment Name',
+                    'Model',
+                    'Serial Number',
+                    'Hour Meter',
+                    'Tanggal Breakdown',
+                    'Detail Breakdown',
+                ]);
+
+                $number = 1;
+                $lastCategoryId = '';
+
+                $details = $hour_meter->details()->with(['equipment', 'equipment.category'])->orderBy('category_id')->get()->sortBy('equipment.category_id');
+                foreach ($details as $detail) {
+                    $number = ($lastCategoryId != $detail->equipment?->category_id) ? 1 : $number;
+                    $lastCategoryId = $detail->equipment?->category_id;
+
+                    $data = [
+                        $detail->equipment?->category?->name ?? '',
+                        $number++,
+                        $detail->equipment?->code ?? '',
+                        $detail->equipment?->brand ?? '',
+                        $detail->equipment?->model ?? '',
+                        $detail->equipment?->serial_number ?? '',
+                        $detail->new_hour_meter ?? '',
+                        $detail->created_at->isoFormat('Y-MM-DD'),
+                        $detail->service_plan,
+                    ];
+
+                    fputcsv($handle, $data);
+                }
+
+                fclose($handle);
+            }, 200, $headers);
+        } catch (\Throwable $throwable) {
+            Log::error($throwable->getMessage());
+
+            return redirect()->route('report.hour-meter.index');
         }
     }
 }
