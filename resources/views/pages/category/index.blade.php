@@ -4,7 +4,11 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="py-3 mb-0">Kategori Unit</h4>
     <div>
-        <a href="{{ route('category.create') }}" class="btn btn-primary btn-sm text-white fw-medium">+ Kategori Unit</a>
+        @if(auth()->user()->isParent())
+            <a href="{{ route('category.create') }}" class="btn btn-primary btn-sm text-white fw-medium">
+                + Kategori Unit
+            </a>
+        @endif
     </div>
 </div>
 
@@ -24,7 +28,9 @@
                 <tr>
                     <th>Nama Kategori</th>
                     <th>Total Unit Peralatan</th>
+                    @if(auth()->user()->isParent())
                     <th width="15px"></th>
+                    @endif
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -34,6 +40,7 @@
                             <a href="{{ route('category.rule.index', $category->id) }}">{{ $category->name }}</a>
                         </td>
                         <td>{{ $category->equipment_count }}</td>
+                        @if(auth()->user()->isParent())
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
@@ -47,6 +54,7 @@
                                 </div>
                             </div>
                         </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>

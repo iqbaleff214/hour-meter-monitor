@@ -13,7 +13,7 @@ class UpdateEquipmentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->isParent();
+        return auth()->user()->isParent() || auth()->user()->id == $this->user_id;
     }
 
     /**

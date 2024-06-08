@@ -63,6 +63,7 @@
                 </select>
                 <span class="error invalid-feedback">{{ $errors->first('condition') }}</span>
             </div>
+            @if(auth()->user()->isParent())
             <div class="mb-3">
                 <label for="user_id" class="form-label">Pemilik</label>
                 <select class="form-select @error('user_id') is-invalid @enderror" id="user_id" name="user_id">
@@ -73,6 +74,9 @@
                 </select>
                 <span class="error invalid-feedback">{{ $errors->first('user_id') }}</span>
             </div>
+            @else
+                <input type="hidden" name="user_id" value="{{ $equipment->user_id }}">
+            @endif
             <button type="submit" class="btn btn-primary">Simpan</button>
         </form>
     </div>

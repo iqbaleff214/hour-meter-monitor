@@ -83,7 +83,6 @@ class EquipmentController extends Controller
     public function update(UpdateEquipmentRequest $request, Equipment $equipment): RedirectResponse
     {
         try {
-//            dd($request->validated());
             $equipment->update($request->validated());
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Unit Peralatan', 'message' => 'Berhasil mengubah unit peralatan!']);

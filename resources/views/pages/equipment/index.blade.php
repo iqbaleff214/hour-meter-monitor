@@ -4,8 +4,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="py-3 mb-0">Unit Peralatan</h4>
         <div>
-            <a href="{{ route('equipment.create') }}" class="btn btn-primary btn-sm text-white fw-medium">+ Unit
-                Peralatan</a>
+            @if(auth()->user()->isParent())
+                <a href="{{ route('equipment.create') }}" class="btn btn-primary btn-sm text-white fw-medium">
+                    + UnitPeralatan
+                </a>
+            @endif
         </div>
     </div>
 
@@ -50,7 +53,8 @@
                         <td>{{ $equipment->category->name }}</td>
                         <td>{{ $equipment->last_hour_meter }}</td>
                         <td>
-                            <span class="badge bg-label-{{ $equipment->condition === 'ready' ? 'success' : 'danger' }} me-1">{{ strtoupper($equipment->condition) }}</span>
+                            <span
+                                class="badge bg-label-{{ $equipment->condition === 'ready' ? 'success' : 'danger' }} me-1">{{ strtoupper($equipment->condition) }}</span>
                         </td>
                         @if(auth()->user()->isParent())
                             <td>{{ $equipment->subsidiary?->name ?? '-' }}</td>

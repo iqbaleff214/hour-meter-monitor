@@ -4,7 +4,9 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="py-3 mb-0"><a class="text-muted fw-light" href="{{ route('category.index') }}">Kategori Unit /</a> {{ $category->name }}</h4>
     <div>
+        @if(auth()->user()->isParent())
         <a href="{{ route('category.rule.create', $category->id) }}" class="btn btn-primary btn-sm text-white fw-medium">+ Aturan Servis</a>
+        @endif
     </div>
 </div>
 
@@ -22,16 +24,19 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Detail Servis</th>
                     <th>Maksimum Hour Meter</th>
+                    <th>Detail Servis</th>
+                    @if(auth()->user()->isParent())
                     <th width="15px"></th>
+                    @endif
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
                 @foreach ($rules as $rule)
                     <tr>
-                        <td>{{ $rule->service_plan }}</td>
                         <td>{{ $rule->max_value }}</td>
+                        <td>{{ $rule->service_plan }}</td>
+                        @if(auth()->user()->isParent())
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
@@ -45,6 +50,7 @@
                                 </div>
                             </div>
                         </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
