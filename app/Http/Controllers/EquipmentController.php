@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\Condition;
 use App\Http\Requests\StoreEquipmentRequest;
 use App\Http\Requests\UpdateEquipmentRequest;
 use App\Models\Category;
@@ -72,6 +73,7 @@ class EquipmentController extends Controller
             'subsidiaries' => User::subsidiary()->get(),
             'equipment' => $equipment,
             'brands' => Equipment::groupBy('brand')->select('brand')->pluck('brand')->toArray(),
+            'conditions' => Condition::cases()
         ]);
     }
 
@@ -81,6 +83,7 @@ class EquipmentController extends Controller
     public function update(UpdateEquipmentRequest $request, Equipment $equipment): RedirectResponse
     {
         try {
+//            dd($request->validated());
             $equipment->update($request->validated());
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Unit Peralatan', 'message' => 'Berhasil mengubah unit peralatan!']);

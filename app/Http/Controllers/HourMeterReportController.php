@@ -50,6 +50,7 @@ class HourMeterReportController extends Controller
             ]);
 
             $equipments = $request->input('equipment_id');
+            $conditions = $request->input('condition');
             $hourMeters = $request->input('new_hour_meter');
             $servicePlans = $request->input('service_plan');
 
@@ -60,6 +61,7 @@ class HourMeterReportController extends Controller
                     'equipment_id' => $equipments[$i],
                     'new_hour_meter' => $hourMeters[$i],
                     'service_plan' => $servicePlans[$i],
+                    'condition' => $conditions[$i],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
@@ -68,7 +70,10 @@ class HourMeterReportController extends Controller
             HourMeterReportDetail::insert($reportDetail);
 
             for ($i = 0; $i < count($equipments); $i++) {
-                Equipment::find($equipments[$i])->update(['last_hour_meter' => (int)$hourMeters[$i]]);
+                Equipment::find($equipments[$i])->update([
+                    'last_hour_meter' => (int)$hourMeters[$i],
+                    'condition' => $conditions[$i],
+                ]);
             }
 
             DB::commit();
@@ -142,6 +147,7 @@ class HourMeterReportController extends Controller
                     'Equipment Name',
                     'Model',
                     'Serial Number',
+                    'Kondisi',
                     'Hour Meter',
                     'Tanggal Breakdown',
                     'Detail Breakdown',
@@ -162,8 +168,9 @@ class HourMeterReportController extends Controller
                         $detail->equipment?->brand ?? '',
                         $detail->equipment?->model ?? '',
                         $detail->equipment?->serial_number ?? '',
+                        strtoupper($detail->condition ?? ''),
                         $detail->new_hour_meter ?? '',
-                        $detail->created_at->isoFormat('Y-MM-DD'),
+                        $detail->created_at?->isoFormat('Y-MM-DD'),
                         $detail->service_plan,
                     ];
 

@@ -22,7 +22,7 @@
                     <th>No.</th>
                     <th>Kode Unit</th>
                     <th>Model</th>
-                    <th>Kategori Unit</th>
+                    <th>Kondisi</th>
                     <th>Hour Meter</th>
                     <th>Detail Servis</th>
                 </tr>
@@ -38,7 +38,9 @@
                         <div class="fw-semibold">{{ $report->equipment?->brand }}</div>
                         {{ $report->equipment?->model }}
                     </td>
-                    <td>{{ $report->equipment?->category->name }}</td>
+                    <td>
+                        <span class="badge bg-label-{{ $report->condition === 'ready' ? 'success' : 'danger' }} me-1">{{ strtoupper($report->condition) }}</span>
+                    </td>
                     <td>{{ $report->new_hour_meter }}</td>
                     <td>{{ $report->service_plan ?? '-' }}</td>
                 </tr>

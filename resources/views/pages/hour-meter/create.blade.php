@@ -95,7 +95,6 @@
             const categoryId = selected[index].category_id;
 
             fetch(`/category/${categoryId}/rule-search?hm=${e.target.value}`).then(res => res.json()).then(res => {
-                console.log(res);
                 $('input[name="service_plan[' + index + ']"]').val(res?.service_plan);
             });
 
@@ -106,20 +105,29 @@
             for (let i = 0; i < selected.length; i++) {
                 equipmentWrapper.innerHTML += `
                         <div class="row">
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <div class="mb-3">
                                     <input type="hidden" name="equipment_id[${i}]" value="${selected[i].id}" />
                                     <label class="form-label" for="${`serial-number-` + i}">Serial Number</label>
                                     <input type="text" class="form-control" id="${`serial-number-` + i}" value="${selected[i].serial_number}" disabled>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label" for="${`hour-meter-` + i}">Hour Meter</label>
                                     <input type="number" name="new_hour_meter[${i}]" required data-index="${i}" class="form-control new-hour-meter" id="${`hour-meter-` + i}" value="${selected[i].last_hour_meter}" min="${selected[i].last_hour_meter}">
                                 </div>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="${`condition-` + i}">Kondisi</label>
+                                    <select name="condition[${i}]" required data-index="${i}" class="form-control" id="${`condition-` + i}">
+                                        <option value="ready">READY</option>
+                                        <option value="breakdown">BREAKDOWN</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label" for="${`service-plan-` + i}">Detail Servis</label>
                                     <input type="text" name="service_plan[${i}]" required class="form-control" id="${`service-plan-` + i}" value="">
@@ -129,12 +137,12 @@
             }
         });
 
-        document.getElementById('equipment-input-modal').addEventListener('show.bs.modal', event => {
-            fetch('/api/equipment?q=' + searchEquipmentInput.value).then(res => res.json()).then(res => {
-                wrapperEquipmentInput.innerHTML = '';
-                res.forEach(equipment => {
-                    const isSelected = selected.find(e => e.id === equipment.id);
-                    wrapperEquipmentInput.innerHTML += `
+        const reloadEquipmentList = (search) => fetch('/api/equipment?q=' + search).then(res => res.json()).then(res => {
+            wrapperEquipmentInput.innerHTML = '';
+            res.forEach(equipment => {
+                const isSelected = selected.find(e => e.id === equipment.id);
+                const labelColor = equipment?.condition === 'ready' ? 'bg-label-success' : 'bg-label-danger';
+                wrapperEquipmentInput.innerHTML += `
                         <li class="list-group-item d-flex justify-content-start">
                             <input class="form-check-input me-2" ${isSelected ? 'checked' : ''} data-equipment='${JSON.stringify(equipment)}' type="checkbox" value="${equipment.id}"/>
                             <div class=" flex-grow-1">
@@ -142,31 +150,17 @@
                                     <div class="fw-semibold">${equipment.code}</div>
                                     <small>${equipment.last_hour_meter} Hour Meter</small>
                                 </div>
-                                SN. ${equipment.serial_number}
+                                <div class="d-flex justify-content-between">
+                                    <div>SN. ${equipment.serial_number}</div>
+                                    <span class="badge ${labelColor}">${equipment.condition.toUpperCase()}</span>
+                                </div>
                             </div>
                         </li>`;
-                });
             });
         });
 
-        searchEquipmentInput.addEventListener('keyup', e => {
-            fetch('/api/equipment?q=' + e.target.value).then(res => res.json()).then(res => {
-                wrapperEquipmentInput.innerHTML = '';
-                res.forEach(equipment => {
-                    const isSelected = selected.find(e => e.id === equipment.id);
-                    wrapperEquipmentInput.innerHTML += `
-                        <li class="list-group-item d-flex justify-content-start">
-                            <input class="form-check-input me-2" ${isSelected ? 'checked' : ''} data-equipment='${JSON.stringify(equipment)}' type="checkbox" value="${equipment.id}"/>
-                            <div class=" flex-grow-1">
-                                <div class="d-flex justify-content-between">
-                                    <div class="fw-semibold">${equipment.code}</div>
-                                    <small>${equipment.last_hour_meter} Hour Meter</small>
-                                </div>
-                                SN. ${equipment.serial_number}
-                            </div>
-                        </li>`;
-                });
-            });
-        });
+        document.getElementById('equipment-input-modal').addEventListener('show.bs.modal', _ => reloadEquipmentList(searchEquipmentInput.value));
+
+        searchEquipmentInput.addEventListener('keyup', e => reloadEquipmentList(e.target.value));
     </script>
 @endpush
