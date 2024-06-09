@@ -33,6 +33,17 @@ class Equipment extends Model
         });
     }
 
+    public function scopeFilter(Builder $query, ?string $brand, ?int $category, ?int $subsidiary)
+    {
+        return $query->when($brand, function (Builder $query) use ($brand) {
+            return $query->where('brand', $brand);
+        })->when($category, function (Builder $query) use ($category) {
+            return $query->where('category_id', $category);
+        })->when($subsidiary, function (Builder $query) use ($subsidiary) {
+            return $query->where('user_id', $subsidiary);
+        });
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query) use ($search) {

@@ -11,6 +11,7 @@
             @endif
         </div>
     </div>
+    <div id="request-value" data-request="{{ json_encode((object) request()->query()) }}"></div>
 
     <div class="mb-2">
         <form action="" method="get">
@@ -22,6 +23,68 @@
             </div>
         </form>
     </div>
+    @if(auth()->user()->isParent())
+        <div class="row mb-2">
+            <div class="col-12 col-md-4">
+                <div class="mb-2">
+                    <select class="form-select" id="brand" aria-label="Pilih brand">
+                        <option value="">Semua Brand</option>
+                        @foreach($brands as $id => $brand)
+                            <option
+                                value="{{ $brand }}" @selected(request()->query('brand') == $brand)>{{ $brand }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="mb-2">
+                    <select class="form-select" id="category" aria-label="Pilih kategori">
+                        <option value="">Semua Kategori Unit</option>
+                        @foreach($categories as $id => $category)
+                            <option
+                                value="{{ $id }}" @selected(request()->query('category') == $id)>{{ $category }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="mb-2">
+                    <select class="form-select" id="subsidiary" aria-label="Pilih pelapor">
+                        <option value="">Semua Pemilik</option>
+                        @foreach($subsidiaries as $id => $subsidiary)
+                            <option
+                                value="{{ $id }}" @selected(request()->query('subsidiary') == $id)>{{ $subsidiary }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="row mb-2">
+            <div class="col-12 col-md-6">
+                <div class="mb-2">
+                    <select class="form-select" id="brand" aria-label="Pilih brand">
+                        <option value="">Semua Brand</option>
+                        @foreach($brands as $id => $brand)
+                            <option
+                                value="{{ $brand }}" @selected(request()->query('brand') == $brand)>{{ $brand }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-2">
+                    <select class="form-select" id="category" aria-label="Pilih kategori">
+                        <option value="">Semua Kategori Unit</option>
+                        @foreach($categories as $id => $category)
+                            <option
+                                value="{{ $id }}" @selected(request()->query('category') == $id)>{{ $category }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <div class="card mb-4">
         <div class="table-responsive text-nowrap">
@@ -86,3 +149,33 @@
 
     {!! $equipmentAll->links() !!}
 @endsection
+
+@push('script')
+    <script>
+        const baseUrl = new URL(window.location.href);
+        const queries = JSON.parse(document.getElementById('request-value').dataset.request);
+
+        Object.keys(queries).forEach((k) => queries[k] == null && delete queries[k]);
+
+        const subsidiarySelectElement = document.getElementById('subsidiary');
+        if (subsidiarySelectElement) {
+            subsidiarySelectElement.onchange = function (e) {
+                queries.subsidiary = e.target.value;
+                baseUrl.search = new URLSearchParams(queries).toString();
+                location.href = baseUrl.href;
+            }
+        }
+
+        document.getElementById('category').onchange = function (e) {
+            queries.category = e.target.value;
+            baseUrl.search = new URLSearchParams(queries).toString();
+            location.href = baseUrl.href;
+        }
+
+        document.getElementById('brand').onchange = function (e) {
+            queries.brand = e.target.value;
+            baseUrl.search = new URLSearchParams(queries).toString();
+            location.href = baseUrl.href;
+        }
+    </script>
+@endpush

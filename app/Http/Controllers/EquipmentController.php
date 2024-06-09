@@ -22,8 +22,18 @@ class EquipmentController extends Controller
      */
     public function index(Request $request): View
     {
+        $brands = Equipment::query()->groupBy('brand')->select('brand')->pluck('brand')->toArray();
+        $categories = Category::query()->pluck('name', 'id')->toArray();
+        $subsidiaries = User::subsidiary()->pluck('name', 'id')->toArray();
+
         return view('pages.equipment.index', [
-            'equipmentAll' => Equipment::owner($request->user())->search($request->query('q'))->render(7),
+            'equipmentAll' => Equipment::owner($request->user())
+                ->filter($request->query('brand'), $request->query('category'), $request->query('subsidiary'))
+                ->search($request->query('q'))
+                ->render(7),
+            'brands' => $brands,
+            'categories' => $categories,
+            'subsidiaries' => $subsidiaries,
         ]);
     }
 
