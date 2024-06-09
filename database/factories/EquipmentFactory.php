@@ -20,7 +20,19 @@ class EquipmentFactory extends Factory
         return [
             'serial_number' => fake()->unique()->creditCardNumber(),
             'code' => fake()->postcode(),
-            'brand' => fake()->company(),
+            'brand' => fake()->randomElement([
+                'KOMATSU',
+                'BOOMAG',
+                'SANY',
+                'HINO',
+                'PERKINS',
+                'CUMMINS',
+                'MAHINDRA',
+                'HILUX',
+                'MITSUBITHI',
+                'KIOTI',
+                'TRAL'
+            ]),
             'model' => fake()->word(),
         ];
     }
