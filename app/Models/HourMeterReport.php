@@ -40,6 +40,15 @@ class HourMeterReport extends Model
         });
     }
 
+    public function scopeFilter(Builder $query, ?string $date, ?int $subsidiaryId)
+    {
+        return $query->when($date, function (Builder $query) use ($date) {
+            return $query->whereDate('created_at', $date);
+        })->when($subsidiaryId, function (Builder $query) use ($subsidiaryId) {
+            return $query->where('user_id', $subsidiaryId);
+        });
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query) use ($search) {

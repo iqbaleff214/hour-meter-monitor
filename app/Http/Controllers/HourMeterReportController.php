@@ -6,6 +6,7 @@ use App\Http\Requests\StoreHourMeterReportRequest;
 use App\Models\Equipment;
 use App\Models\HourMeterReport;
 use App\Models\HourMeterReportDetail;
+use App\Models\User;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,8 +24,15 @@ class HourMeterReportController extends Controller
     public function index(Request $request): View
     {
         return view('pages.hour-meter.index', [
-            'reports' => HourMeterReport::with(['details'])->owner($request->user())->latest('created_at')->search($request->query('q'))->paginate(7)->withQueryString(),
+            'reports' => HourMeterReport::with(['details'])
+                ->owner($request->user())
+                ->latest('created_at')
+                ->filter($request->query('date'), $request->query('subsidiary'))
+                ->search($request->query('q'))
+                ->paginate(7)
+                ->withQueryString(),
             'submitted' => HourMeterReport::query()->availableToday($request->user()),
+            'subsidiaries' => User::subsidiary()->get(),
         ]);
     }
 
