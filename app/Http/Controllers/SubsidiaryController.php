@@ -19,7 +19,7 @@ class SubsidiaryController extends Controller
     public function index(Request $request): View
     {
         return view('pages.subsidiary.index', [
-            'subsidiaries' => User::subsidiary()->search($request->query('q'))->render(7),
+            'subsidiaries' => User::with(['equipment'])->subsidiary()->search($request->query('q'))->render(7),
         ]);
     }
 

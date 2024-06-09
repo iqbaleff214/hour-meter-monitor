@@ -8,6 +8,7 @@ use App\Enum\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -72,6 +73,11 @@ class User extends Authenticatable
     public function isSubsidiary(): bool
     {
         return Role::tryFrom($this->role) === Role::SUBSIDIARY;
+    }
+
+    public function equipment(): HasMany
+    {
+        return $this->hasMany(Equipment::class);
     }
 
     public function scopeSubsidiary(Builder $query): Builder
