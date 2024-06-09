@@ -16,7 +16,7 @@ class HourMeterReportDetail extends Model
 
     public function report(): BelongsTo
     {
-        return $this->belongsTo(HourMeterReport::class);
+        return $this->belongsTo(HourMeterReport::class, 'hour_meter_report_id');
     }
 
     public function equipment(): BelongsTo
