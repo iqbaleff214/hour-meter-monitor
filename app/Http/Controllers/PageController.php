@@ -34,7 +34,7 @@ class PageController extends Controller
                 return $query->where('user_id', $request->user()->id);
             });
         })->whereDate('created_at', '>=', now()->subDays(13))
-            ->whereDate('return_date', '<=', now()->subDays(7))
+            ->whereDate('created_at', '<=', now()->subDays(7))
             ->count();
 
         $mappedReportLast7Days = [];
@@ -54,8 +54,8 @@ class PageController extends Controller
         foreach (CarbonPeriod::create($start7DaysAgo, now()) as $date) {
             $dateMonth = $date->format('d M');
             $formattedReportLast7Days['categories'][] = $dateMonth;
-            $formattedReportLast7Days['series'][0]['data'][] = isset($mappedReportLast7Days[$dateMonth]) ? (int) $mappedReportLast7Days[$dateMonth]->total : 0;
-            $formattedReportLast7Days['total'] += isset($mappedReportLast7Days[$dateMonth]) ? (int) $mappedReportLast7Days[$dateMonth]->total : 0;
+            $formattedReportLast7Days['series'][0]['data'][] = isset($mappedReportLast7Days[$dateMonth]) ? (int)$mappedReportLast7Days[$dateMonth]->total : 0;
+            $formattedReportLast7Days['total'] += isset($mappedReportLast7Days[$dateMonth]) ? (int)$mappedReportLast7Days[$dateMonth]->total : 0;
         }
         $formattedReportLast7Days['totalIncrement'] = $this->incrementPercentage($reportPreviousWeek, $formattedReportLast7Days['total']);
 
@@ -68,7 +68,7 @@ class PageController extends Controller
         $otherEquipment = Equipment::owner($request->user())->whereNotIn('brand', $totalEquipment->pluck('brand'))->count();
 
         if (count($totalEquipment) === 0) {
-            $totalEquipment = [ (object) [ 'brand' => '-', 'total' => 0 ], (object) [ 'brand' => '-', 'total' => 0 ], (object) [ 'brand' => '-', 'total' => 0 ], ];
+            $totalEquipment = [(object)['brand' => '-', 'total' => 0], (object)['brand' => '-', 'total' => 0], (object)['brand' => '-', 'total' => 0],];
         }
 
         return view('pages.dashboard', [
@@ -82,6 +82,7 @@ class PageController extends Controller
             ],
         ]);
     }
+
     private function incrementPercentage(int|float $old, int|float $new): float
     {
         if ($old === 0 and $new === 0) {
@@ -99,6 +100,6 @@ class PageController extends Controller
         $diff = $new - $old;
         $percentage = $diff / $old * 100;
 
-        return (float) number_format($percentage, 2);
+        return (float)number_format($percentage, 2);
     }
 }
