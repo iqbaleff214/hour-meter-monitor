@@ -33,7 +33,7 @@ class Equipment extends Model
         });
     }
 
-    public function scopeFilter(Builder $query, ?string $brand, ?int $category, ?int $subsidiary)
+    public function scopeFilter(Builder $query, ?string $brand, ?int $category, ?int $subsidiary, ?string $condition)
     {
         return $query->when($brand, function (Builder $query) use ($brand) {
             return $query->where('brand', $brand);
@@ -41,6 +41,8 @@ class Equipment extends Model
             return $query->where('category_id', $category);
         })->when($subsidiary, function (Builder $query) use ($subsidiary) {
             return $query->where('user_id', $subsidiary);
+        })->when($condition, function (Builder $query) use ($condition) {
+            return $query->where('condition', $condition);
         });
     }
 

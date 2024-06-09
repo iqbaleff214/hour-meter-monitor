@@ -25,15 +25,17 @@ class EquipmentController extends Controller
         $brands = Equipment::query()->groupBy('brand')->select('brand')->pluck('brand')->toArray();
         $categories = Category::query()->pluck('name', 'id')->toArray();
         $subsidiaries = User::subsidiary()->pluck('name', 'id')->toArray();
+        $conditions = Condition::cases();
 
         return view('pages.equipment.index', [
             'equipmentAll' => Equipment::owner($request->user())
-                ->filter($request->query('brand'), $request->query('category'), $request->query('subsidiary'))
+                ->filter($request->query('brand'), $request->query('category'), $request->query('subsidiary'), $request->query('condition'))
                 ->search($request->query('q'))
                 ->render(7),
             'brands' => $brands,
             'categories' => $categories,
             'subsidiaries' => $subsidiaries,
+            'conditions' => $conditions,
         ]);
     }
 
