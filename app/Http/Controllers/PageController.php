@@ -67,6 +67,10 @@ class PageController extends Controller
             ->get();
         $otherEquipment = Equipment::owner($request->user())->whereNotIn('brand', $totalEquipment->pluck('brand'))->count();
 
+        if (count($totalEquipment) === 0) {
+            $totalEquipment = [ (object) [ 'brand' => '-', 'total' => 0 ], (object) [ 'brand' => '-', 'total' => 0 ], (object) [ 'brand' => '-', 'total' => 0 ], ];
+        }
+
         return view('pages.dashboard', [
             'submitted' => HourMeterReport::query()->availableToday($request->user()),
             'chart' => [
