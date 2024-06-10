@@ -26,7 +26,7 @@ class PageController extends Controller
                 return $query->where('user_id', $request->user()->id);
             });
         })->whereDate('created_at', '>=', $start7DaysAgo)
-            ->selectRaw("DATE(created_at) as date, COUNT(equipment_id) as total, COUNT(CASE WHEN condition='ready' THEN 1 END) as ready, COUNT(CASE WHEN condition='breakdown' THEN 1 END) as breakdown")
+            ->selectRaw("DATE(created_at) as date, COUNT(equipment_id) as total, COUNT(CASE WHEN `condition`='ready' THEN 1 END) as ready, COUNT(CASE WHEN `condition`='breakdown' THEN 1 END) as breakdown")
             ->groupByRaw('DATE(created_at)')
             ->get();
         $reportPreviousWeek = HourMeterReportDetail::whereHas('report', function (Builder $query) use ($request) {
