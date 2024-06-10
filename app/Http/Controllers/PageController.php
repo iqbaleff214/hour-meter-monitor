@@ -26,7 +26,7 @@ class PageController extends Controller
                 return $query->where('user_id', $request->user()->id);
             });
         })->whereDate('created_at', '>=', $start7DaysAgo)
-            ->selectRaw("COUNT(equipment_id) as total, COUNT(CASE WHEN condition='ready' THEN 1 END) as ready, COUNT(CASE WHEN condition='breakdown' THEN 1 END) as breakdown")
+            ->selectRaw("DATE(created_at) as date, COUNT(equipment_id) as total, COUNT(CASE WHEN condition='ready' THEN 1 END) as ready, COUNT(CASE WHEN condition='breakdown' THEN 1 END) as breakdown")
             ->groupByRaw('DATE(created_at)')
             ->get();
         $reportPreviousWeek = HourMeterReportDetail::whereHas('report', function (Builder $query) use ($request) {
@@ -39,12 +39,12 @@ class PageController extends Controller
 
         $mappedReportLast7Days = [];
         foreach ($reportLast7Days as $report) {
-            $mappedReportLast7Days[Carbon::parse($report->created_at)->format('d M')] = $report;
+            $mappedReportLast7Days[Carbon::parse($report->date)->format('d M')] = $report;
         }
 
         $formattedReportLast7Days = [
             'series' => [
-                ['name' => 'Unit Peralatan Dilaporkan', 'data' => []],
+                ['name' => 'Dilaporkan', 'data' => []],
             ],
             'categories' => [],
             'total' => 0,
