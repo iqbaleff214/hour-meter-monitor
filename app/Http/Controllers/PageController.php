@@ -26,7 +26,7 @@ class PageController extends Controller
                 return $query->where('user_id', $request->user()->id);
             });
         })->whereDate('created_at', '>=', $start7DaysAgo)
-            ->selectRaw("COUNT(equipment_id) as total")
+            ->selectRaw("COUNT(equipment_id) as total, COUNT(CASE WHEN condition='ready' THEN 1 END) as ready, COUNT(CASE WHEN condition='breakdown' THEN 1 END) as breakdown")
             ->groupByRaw('DATE(created_at)')
             ->get();
         $reportPreviousWeek = HourMeterReportDetail::whereHas('report', function (Builder $query) use ($request) {
@@ -51,11 +51,24 @@ class PageController extends Controller
             'totalPrevious' => $reportPreviousWeek,
         ];
 
+        $formattedReportConditionLast7Days = [
+            'series' => [
+                ['name' => 'READY', 'data' => []],
+                ['name' => 'BREAKDOWN', 'data' => []],
+            ],
+            'categories' => [],
+        ];
+
         foreach (CarbonPeriod::create($start7DaysAgo, now()) as $date) {
             $dateMonth = $date->format('d M');
+
             $formattedReportLast7Days['categories'][] = $dateMonth;
             $formattedReportLast7Days['series'][0]['data'][] = isset($mappedReportLast7Days[$dateMonth]) ? (int)$mappedReportLast7Days[$dateMonth]->total : 0;
             $formattedReportLast7Days['total'] += isset($mappedReportLast7Days[$dateMonth]) ? (int)$mappedReportLast7Days[$dateMonth]->total : 0;
+
+            $formattedReportConditionLast7Days['categories'][] = $dateMonth;
+            $formattedReportConditionLast7Days['series'][0]['data'][] = isset($mappedReportLast7Days[$dateMonth]) ? (int)$mappedReportLast7Days[$dateMonth]->ready : 0;
+            $formattedReportConditionLast7Days['series'][1]['data'][] = isset($mappedReportLast7Days[$dateMonth]) ? (int)$mappedReportLast7Days[$dateMonth]->breakdown : 0;
         }
         $formattedReportLast7Days['totalIncrement'] = $this->incrementPercentage($reportPreviousWeek, $formattedReportLast7Days['total']);
 
@@ -75,6 +88,7 @@ class PageController extends Controller
             'submitted' => HourMeterReport::query()->availableToday($request->user()),
             'chart' => [
                 'equipment_report' => $formattedReportLast7Days,
+                'condition_report' => $formattedReportConditionLast7Days,
             ],
             'summary' => [
                 'top3' => $totalEquipment,

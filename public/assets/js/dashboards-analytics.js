@@ -14,18 +14,10 @@
 
     // Total Revenue Report Chart - Bar Chart
     // --------------------------------------------------------------------
-    const totalRevenueChartEl = document.querySelector('#totalRevenueChart'),
-        totalRevenueChartOptions = {
-            series: [
-                {
-                    name: '2021',
-                    data: [18, 7, 15, 29, 18, 12, 9]
-                },
-                {
-                    name: '2020',
-                    data: [-13, -18, -9, -14, -5, -17, -15]
-                }
-            ],
+    const conditionReportChartEl = document.querySelector('#conditionReportChart');
+    const conditionReportChartJson = JSON.parse(conditionReportChartEl.dataset.chart);
+    const conditionReportChartOptions = {
+            series: conditionReportChartJson.series,
             chart: {
                 height: 300,
                 stacked: true,
@@ -41,7 +33,7 @@
                     endingShape: 'rounded'
                 }
             },
-            colors: [config.colors.primary, config.colors.info],
+            colors: [config.colors.success, config.colors.danger],
             dataLabels: {
                 enabled: false
             },
@@ -78,7 +70,7 @@
                 }
             },
             xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                categories: conditionReportChartJson.categories,
                 labels: {
                     style: {
                         fontSize: '13px',
@@ -269,90 +261,9 @@
                 }
             }
         };
-    if (typeof totalRevenueChartEl !== undefined && totalRevenueChartEl !== null) {
-        const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
-        totalRevenueChart.render();
-    }
-
-    // Growth Chart - Radial Bar Chart
-    // --------------------------------------------------------------------
-    const growthChartEl = document.querySelector('#growthChart'),
-        growthChartOptions = {
-            series: [78],
-            labels: ['Growth'],
-            chart: {
-                height: 240,
-                type: 'radialBar'
-            },
-            plotOptions: {
-                radialBar: {
-                    size: 150,
-                    offsetY: 10,
-                    startAngle: -150,
-                    endAngle: 150,
-                    hollow: {
-                        size: '55%'
-                    },
-                    track: {
-                        background: cardColor,
-                        strokeWidth: '100%'
-                    },
-                    dataLabels: {
-                        name: {
-                            offsetY: 15,
-                            color: headingColor,
-                            fontSize: '15px',
-                            fontWeight: '500',
-                            fontFamily: 'Public Sans'
-                        },
-                        value: {
-                            offsetY: -25,
-                            color: headingColor,
-                            fontSize: '22px',
-                            fontWeight: '500',
-                            fontFamily: 'Public Sans'
-                        }
-                    }
-                }
-            },
-            colors: [config.colors.primary],
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shade: 'dark',
-                    shadeIntensity: 0.5,
-                    gradientToColors: [config.colors.primary],
-                    inverseColors: true,
-                    opacityFrom: 1,
-                    opacityTo: 0.6,
-                    stops: [30, 70, 100]
-                }
-            },
-            stroke: {
-                dashArray: 5
-            },
-            grid: {
-                padding: {
-                    top: -35,
-                    bottom: -10
-                }
-            },
-            states: {
-                hover: {
-                    filter: {
-                        type: 'none'
-                    }
-                },
-                active: {
-                    filter: {
-                        type: 'none'
-                    }
-                }
-            }
-        };
-    if (typeof growthChartEl !== undefined && growthChartEl !== null) {
-        const growthChart = new ApexCharts(growthChartEl, growthChartOptions);
-        growthChart.render();
+    if (typeof conditionReportChartEl !== undefined) {
+        const conditionReportChart = new ApexCharts(conditionReportChartEl, conditionReportChartOptions);
+        conditionReportChart.render();
     }
 
     // Profit Report Line Chart
@@ -411,7 +322,7 @@
             show: false
         }
     };
-    if (typeof equipmentReportChartEl !== undefined && equipmentReportChartEl !== null) {
+    if (typeof equipmentReportChartEl !== undefined) {
         const equipmentReportChart = new ApexCharts(equipmentReportChartEl, equipmentReportChartConfig);
         equipmentReportChart.render();
     }
