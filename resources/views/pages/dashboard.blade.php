@@ -68,7 +68,7 @@
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <div class="d-flex mb-1 flex-column">
                                     <small>Brand</small>
-                                    <span class="d-block fw-bold">{{ $top3->brand }}</span>
+                                    <a class="d-block fw-bold" href="{{ route('equipment.index') . '?brand=' . $top3->brand }}">{{ $top3->brand }}</a>
                                 </div>
                                 <div class="d-flex align-items-end mt-3 justify-content-end">
                                     <h3 class="card-title text-nowrap my-0 me-2">{{ $top3->total }}</h3>
