@@ -54,15 +54,6 @@
                 </select>
                 <span class="error invalid-feedback">{{ $errors->first('category_id') }}</span>
             </div>
-            <div class="mb-3">
-                <label for="condition" class="form-label">Kondisi</label>
-                <select class="form-select @error('condition') is-invalid @enderror" id="condition" name="condition">
-                    @foreach ($conditions as $condition)
-                        <option value="{{ $condition->value }}" @selected(old('condition', $equipment->condition) === $condition->value)>{{ strtoupper($condition->value) }}</option>
-                    @endforeach
-                </select>
-                <span class="error invalid-feedback">{{ $errors->first('condition') }}</span>
-            </div>
             @if(auth()->user()->isParent())
             <div class="mb-3">
                 <label for="user_id" class="form-label">Pemilik</label>

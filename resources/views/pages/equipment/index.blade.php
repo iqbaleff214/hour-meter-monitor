@@ -25,7 +25,7 @@
     </div>
     @if(auth()->user()->isParent())
         <div class="row mb-2">
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-4">
                 <div class="mb-2">
                     <select class="form-select" id="brand" aria-label="Pilih brand">
                         <option value="">Semua Brand</option>
@@ -36,7 +36,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-4">
                 <div class="mb-2">
                     <select class="form-select" id="category" aria-label="Pilih kategori">
                         <option value="">Semua Kategori Unit</option>
@@ -47,7 +47,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-4">
                 <div class="mb-2">
                     <select class="form-select" id="subsidiary" aria-label="Pilih pelapor">
                         <option value="">Semua Pemilik</option>
@@ -58,21 +58,10 @@
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-md-3">
-                <div class="mb-2">
-                    <select class="form-select" id="condition" aria-label="Pilih kondisi">
-                        <option value="">Semua Kondisi</option>
-                        @foreach($conditions as $condition)
-                            <option
-                                value="{{ $condition->value }}" @selected(request()->query('condition') == $condition->value)>{{ strtoupper($condition->value) }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
         </div>
     @else
         <div class="row mb-2">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6">
                 <div class="mb-2">
                     <select class="form-select" id="brand" aria-label="Pilih brand">
                         <option value="">Semua Brand</option>
@@ -83,24 +72,13 @@
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6">
                 <div class="mb-2">
                     <select class="form-select" id="category" aria-label="Pilih kategori">
                         <option value="">Semua Kategori Unit</option>
                         @foreach($categories as $id => $category)
                             <option
                                 value="{{ $id }}" @selected(request()->query('category') == $id)>{{ $category }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="mb-2">
-                    <select class="form-select" id="condition" aria-label="Pilih kondisi">
-                        <option value="">Semua Kondisi</option>
-                        @foreach($conditions as $condition)
-                            <option
-                                value="{{ $condition->value }}" @selected(request()->query('condition') == $condition->value)>{{ strtoupper($condition->value) }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -117,7 +95,6 @@
                     <th>Model</th>
                     <th>Kategori Unit</th>
                     <th>Hour Meter</th>
-                    <th>Kondisi</th>
                     @if(auth()->user()->isParent())
                         <th>Pemilik</th>
                     @endif
@@ -137,10 +114,6 @@
                         </td>
                         <td>{{ $equipment->category->name }}</td>
                         <td>{{ $equipment->last_hour_meter }}</td>
-                        <td>
-                            <span
-                                class="badge bg-label-{{ $equipment->condition === 'ready' ? 'success' : 'danger' }} me-1">{{ strtoupper($equipment->condition) }}</span>
-                        </td>
                         @if(auth()->user()->isParent())
                             <td>{{ $equipment->subsidiary?->name ?? '-' }}</td>
                         @endif
