@@ -43,6 +43,11 @@
                 <span class="error invalid-feedback">{{ $errors->first('model') }}</span>
             </div>
             <div class="mb-3">
+                <label class="form-label" for="initial_hour_meter">Hour Meter Sekarang</label>
+                <input type="number" min="0" class="form-control @error('initial_hour_meter') is-invalid @enderror" name="initial_hour_meter" id="initial_hour_meter" value="{{ old('initial_hour_meter', 0) }}">
+                <span class="error invalid-feedback">{{ $errors->first('initial_hour_meter') }}</span>
+            </div>
+            <div class="mb-3">
                 <label for="category_id" class="form-label">Kategori Unit</label>
                 <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id">
                     <option selected disabled></option>

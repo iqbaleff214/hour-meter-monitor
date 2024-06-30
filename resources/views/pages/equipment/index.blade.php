@@ -105,7 +105,7 @@
                 @foreach ($equipmentAll as $equipment)
                     <tr>
                         <td>
-                            <div class="fw-semibold">{{ $equipment->code }}</div>
+                            <a href="{{ route('equipment.show', $equipment) }}" class="fw-semibold d-block">{{ $equipment->code }}</a>
                             SN. {{ $equipment->serial_number }}
                         </td>
                         <td>

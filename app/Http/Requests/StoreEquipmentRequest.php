@@ -29,6 +29,7 @@ class StoreEquipmentRequest extends FormRequest
             'model' => ['required'],
             'category_id' => ['required'],
             'user_id' => ['nullable'],
+            'initial_hour_meter' => ['required', 'min:0', 'numeric'],
         ];
     }
 }

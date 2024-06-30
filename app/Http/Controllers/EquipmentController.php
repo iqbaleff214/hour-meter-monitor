@@ -6,8 +6,11 @@ use App\Enum\Condition;
 use App\Http\Requests\StoreEquipmentRequest;
 use App\Http\Requests\UpdateEquipmentRequest;
 use App\Models\Category;
+use App\Models\CategoryRule;
 use App\Models\Equipment;
 use App\Models\User;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -72,7 +75,9 @@ class EquipmentController extends Controller
      */
     public function show(Equipment $equipment)
     {
-        //
+        return view('pages.equipment.show', [
+            'equipment' => $equipment,
+        ]);
     }
 
     /**
@@ -128,5 +133,54 @@ class EquipmentController extends Controller
             ])->owner($request->user())->search($request->query('q'))->get();
 
         return response()->json($result);
+    }
+
+    public function event(Request $request, Equipment $equipment)
+    {
+        $start = Carbon::parse($request->start);
+        $end = Carbon::parse($request->end);
+
+        $hm = (int) $equipment->initial_hour_meter;
+
+        $category = $equipment->category()->with(['rules' => fn($q) => $q->orderBy('min_value', 'asc')])->first();
+
+        $events = [];
+        foreach (CarbonPeriod::between($start, $end) as $date) {
+            if ($equipment->created_at > $date) continue;
+
+            $currentHM = $hm + ((int) $equipment->created_at->diffInDays($date) * 7);
+
+            $event = [
+                'start' => $date->toDateString(),
+                'title' => $currentHM,
+            ];
+
+            $currentRule = $this->eventRule($category->rules, $currentHM);
+            if ($currentRule) {
+                $event = [
+                    ...$event,
+                    'backgroundColor' => '#BB4B36',
+                    'borderColor' => '#BB4B36',
+                    'textColor' => '#fff',
+                    'title' => $event['title'] . '(PM ' . $currentRule->max_value . ')',
+                ];
+            }
+
+
+            $events[] = $event;
+        }
+
+        return response()->json($events);
+    }
+
+    private function eventRule(iterable $rules, int $hm): ?CategoryRule
+    {
+        foreach($rules as $rule) {
+            if ($hm >= (int) $rule->min_value && $hm <= (int) $rule->max_value) {
+                return $rule;
+            }
+        }
+
+        return null;
     }
 }

@@ -13,7 +13,7 @@ class Equipment extends Model
 
     protected $fillable = [
         'serial_number', 'code', 'brand', 'model', 'condition',
-        'last_hour_meter', 'category_id', 'user_id',
+        'initial_hour_meter', 'last_hour_meter', 'category_id', 'user_id',
     ];
 
     public function category(): BelongsTo

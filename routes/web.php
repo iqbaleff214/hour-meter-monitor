@@ -26,8 +26,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('rule', CategoryRuleController::class)->except(['show']);
         Route::get('rule-search', [CategoryRuleController::class, 'rule'])->name('rule.search');
     });
-    Route::resource('equipment', EquipmentController::class)->except(['show']);
+    Route::resource('equipment', EquipmentController::class);
     Route::get('api/equipment', [EquipmentController::class, 'search']);
+    Route::get('api/equipment/{equipment}/event', [EquipmentController::class, 'event']);
 
     Route::prefix('report')->as('report.')->group(function () {
         Route::get('hour-meter/{hour_meter}/export', [HourMeterReportController::class, 'export'])->name('hour-meter.export');
