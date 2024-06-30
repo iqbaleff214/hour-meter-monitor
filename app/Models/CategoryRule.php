@@ -13,11 +13,15 @@ class CategoryRule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id', 'min_value', 'max_value', 'service_plan',
+        'category_id', 'min_value', 'max_value', 'service_plan', 'content',
     ];
 
     protected $appends = [
         'range_value',
+    ];
+
+    protected $casts = [
+        'content' => 'object',
     ];
 
     public function rangeValue(): Attribute

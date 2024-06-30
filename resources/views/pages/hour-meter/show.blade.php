@@ -16,34 +16,43 @@
     <div class="card mb-4">
         <h4 class="card-header p-3">{{ $category }}</h4>
         <div class="table-responsive text-nowrap">
-            <table class="table table-striped">
+            <table class="table">
                 <thead>
                 <tr>
                     <th>No.</th>
                     <th>Kode Unit</th>
                     <th>Model</th>
-                    <th>Kondisi</th>
-                    <th>Hour Meter</th>
-                    <th>Detail Servis</th>
+                    <th>HM</th>
+                    <th>Part Number</th>
+                    <th>Part Name</th>
+                    <th>Qty</th>
+                    <th>Unit</th>
+                    <th>Note</th>
                 </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                @foreach ($reports as $index => $report)<tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>
-                        <div class="fw-semibold">{{ $report->equipment?->code }}</div>
-                        SN. {{ $report->equipment?->serial_number }}
-                    </td>
-                    <td>
-                        <div class="fw-semibold">{{ $report->equipment?->brand }}</div>
-                        {{ $report->equipment?->model }}
-                    </td>
-                    <td>
-                        <span class="badge bg-label-{{ $report->condition === 'ready' ? 'success' : 'danger' }} me-1">{{ strtoupper($report->condition) }}</span>
-                    </td>
-                    <td>{{ $report->new_hour_meter }}</td>
-                    <td>{{ $report->service_plan ?? '-' }}</td>
-                </tr>
+                @foreach ($reports as $reportIndex => $report)
+                    @foreach ($report->content as $contentIndex => $content)
+                        <tr>
+                            @if($contentIndex === 0)
+                            <td rowspan="{{ count($report->content) }}">{{ $reportIndex + 1 }}</td>
+                            <td rowspan="{{ count($report->content) }}">
+                                <div class="fw-semibold">{{ $report->equipment?->code }}</div>
+                                SN. {{ $report->equipment?->serial_number }}
+                            </td>
+                            <td rowspan="{{ count($report->content) }}">
+                                <div class="fw-semibold">{{ $report->equipment?->brand }}</div>
+                                {{ $report->equipment?->model }}
+                            </td>
+                            <td rowspan="{{ count($report->content) }}">{{ $report->new_hour_meter }}</td>
+                            @endif
+                            <td>{{ $content->part_number ?? '-' }}</td>
+                            <td>{{ $content->part_name ?? '-' }}</td>
+                            <td>{{ $content->quantity ?? '-' }}</td>
+                            <td>{{ $content->unit ?? '-' }}</td>
+                            <td>{{ $content->note ?? '-' }}</td>
+                        </tr>
+                    @endforeach
                 @endforeach
                 </tbody>
             </table>

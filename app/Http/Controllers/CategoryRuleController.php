@@ -42,7 +42,23 @@ class CategoryRuleController extends Controller
     public function store(StoreCategoryRuleRequest $request, Category $category): RedirectResponse
     {
         try {
-            CategoryRule::create($request->validated());
+            $input = $request->validated();
+            $input['content'] = [];
+
+            $contents = $request->input('content');
+            if ($contents) {
+                for ($i=0; $i < count($contents['part_number']); $i++) {
+                    $input['content'][] = [
+                        'part_number' => $contents['part_number'][$i],
+                        'part_name' => $contents['part_name'][$i],
+                        'quantity' => $contents['quantity'][$i],
+                        'unit' => $contents['unit'][$i],
+                        'note' => $contents['note'][$i],
+                    ];
+                }
+            }
+
+            CategoryRule::create($input);
 
             return redirect()->route('category.rule.index', $category)->with('notification', ['icon' => 'success', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Berhasil menambahkan aturan servis!']);
         } catch (Throwable $th) {
@@ -69,7 +85,23 @@ class CategoryRuleController extends Controller
     public function update(UpdateCategoryRuleRequest $request, Category $category, CategoryRule $rule): RedirectResponse
     {
         try {
-            $rule->update($request->validated());
+            $input = $request->validated();
+            $input['content'] = [];
+
+            $contents = $request->input('content');
+            if ($contents) {
+                for ($i=0; $i < count($contents['part_number']); $i++) {
+                    $input['content'][] = [
+                        'part_number' => $contents['part_number'][$i],
+                        'part_name' => $contents['part_name'][$i],
+                        'quantity' => $contents['quantity'][$i],
+                        'unit' => $contents['unit'][$i],
+                        'note' => $contents['note'][$i],
+                    ];
+                }
+            }
+
+            $rule->update($input);
 
             return back()->with('notification', ['icon' => 'success', 'title' => 'Aturan Servis Kategori Unit', 'message' => 'Berhasil mengubah aturan servis!']);
         } catch (Throwable $th) {
@@ -108,6 +140,7 @@ class CategoryRuleController extends Controller
 
         return response()->json([
             'service_plan' => '',
+            'content' => [],
         ]);
     }
 }

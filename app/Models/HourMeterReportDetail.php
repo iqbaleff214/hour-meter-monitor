@@ -11,7 +11,11 @@ class HourMeterReportDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'hour_meter_report_id', 'equipment_id', 'new_hour_meter', 'service_plan', 'condition',
+        'hour_meter_report_id', 'equipment_id', 'new_hour_meter', 'service_plan', 'condition', 'content',
+    ];
+
+    protected $casts = [
+        'content' => 'object',
     ];
 
     public function report(): BelongsTo

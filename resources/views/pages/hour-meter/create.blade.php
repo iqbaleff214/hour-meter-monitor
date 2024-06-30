@@ -94,7 +94,32 @@
             const index = e.target.dataset.index;
             const categoryId = selected[index].category_id;
             fetch(`/category/${categoryId}/rule-search?hm=${e.target.value}`).then(res => res.json()).then(res => {
-                $('input[name="service_plan[' + index + ']"]').val(res?.service_plan);
+                let plans = '';
+                res.content?.forEach((content, countService) => {
+                    plans += `
+                        <div class="mb-3 col-12 col-md-3">
+                            <label class="form-label" for="content[${index}][part_number][${countService}]">Part Number</label>
+                            <input type="text" value="${content.part_number}" class="form-control" name="content[${index}][part_number][${countService}]" id="content[${index}][part_number][${countService}]">
+                        </div>
+                        <div class="mb-3 col-12 col-md-3">
+                            <label class="form-label" for="content[${index}][part_name][${countService}]">Part Name</label>
+                            <input type="text" value="${content.part_name}" class="form-control" name="content[${index}][part_name][${countService}]" id="content[${index}][part_name][${countService}]">
+                        </div>
+                        <div class="mb-3 col-12 col-md-1">
+                            <label class="form-label" for="content[${index}][quantity][${countService}]">Qty</label>
+                            <input type="number" min="0" value="${content.quantity}" class="form-control" name="content[${index}][quantity][${countService}]" id="content[${index}][quantity][${countService}]">
+                        </div>
+                        <div class="mb-3 col-12 col-md-2">
+                            <label class="form-label" for="content[${index}][unit][${countService}]">Unit</label>
+                            <input type="text" value="${content.unit}" class="form-control" name="content[${index}][unit][${countService}]" id="content[${index}][unit][${countService}]">
+                        </div>
+                        <div class="mb-3 col-12 col-md-3">
+                            <label class="form-label" for="content[${index}][note][${countService}]">Note</label>
+                            <input type="text" value="${content.note}" class="form-control" name="content[${index}][note][${countService}]" id="content[${index}][note][${countService}]">
+                        </div>`;
+                });
+                $(`#selected-${index}-row`).html(plans);
+                // $('input[name="service_plan[' + index + ']"]').val(res?.service_plan);
             });
         }
 
@@ -106,27 +131,21 @@
             for (let i = 0; i < selected.length; i++) {
                 equipmentWrapper.innerHTML += `
                         <div class="row">
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-6">
                                 <div class="mb-3">
                                     <input type="hidden" name="equipment_id[${i}]" value="${selected[i].id}" />
                                     <label class="form-label" for="${`serial-number-` + i}">Serial Number</label>
                                     <input type="text" class="form-control" id="${`serial-number-` + i}" value="${selected[i].serial_number}" disabled>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="${`hour-meter-` + i}">Hour Meter</label>
                                     <input type="number" name="new_hour_meter[${i}]" required data-index="${i}" class="form-control new-hour-meter" id="${`hour-meter-` + i}" value="${selected[i].last_hour_meter}" min="${selected[i].last_hour_meter}">
                                     <small>Hour meter sebelumnya: ${selected[i].last_hour_meter}</small>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-4">
-                                <div class="mb-3">
-                                    <label class="form-label" for="${`service-plan-` + i}">Detail Servis</label>
-                                    <input type="text" name="service_plan[${i}]" required class="form-control" id="${`service-plan-` + i}" value="">
-                                </div>
-                            </div>
-                        </div>`;
+                        </div><div class="row" id="selected-${i}-row"></div>`;
             }
         });
 
@@ -144,6 +163,7 @@
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <div>SN. ${equipment.serial_number}</div>
+                                    <small>${equipment.category.name}</small>
                                 </div>
                             </div>
                         </li>`;

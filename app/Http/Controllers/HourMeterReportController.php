@@ -58,20 +58,32 @@ class HourMeterReportController extends Controller
             ]);
 
             $equipments = $request->input('equipment_id');
-            $conditions = $request->input('condition');
             $hourMeters = $request->input('new_hour_meter');
-            $servicePlans = $request->input('service_plan');
+            $contents = $request->input('content');
 
             $reportDetail = [];
             for ($i = 0; $i < count($equipments); $i++) {
+                $currentContent = [];
+                if ($contents[$i]) {
+                    for ($j=0; $j < count($contents[$i]['part_number']); $j++) {
+                        $currentContent[] = [
+                            'part_number' => $contents[$i]['part_number'][$j],
+                            'part_name' => $contents[$i]['part_name'][$j],
+                            'quantity' => $contents[$i]['quantity'][$j],
+                            'unit' => $contents[$i]['unit'][$j],
+                            'note' => $contents[$i]['note'][$j],
+                        ];
+                    }
+                }
+
                 $reportDetail[] = [
                     'hour_meter_report_id' => $report->id,
                     'equipment_id' => $equipments[$i],
                     'new_hour_meter' => $hourMeters[$i],
-                    'service_plan' => $servicePlans[$i],
-                    'condition' => $conditions[$i],
+                    'content' => json_encode($currentContent),
                     'created_at' => now(),
                     'updated_at' => now(),
+                    'service_plan' => 'content',
                 ];
             }
 
@@ -80,7 +92,6 @@ class HourMeterReportController extends Controller
             for ($i = 0; $i < count($equipments); $i++) {
                 Equipment::find($equipments[$i])->update([
                     'last_hour_meter' => (int)$hourMeters[$i],
-                    'condition' => $conditions[$i],
                 ]);
             }
 
@@ -155,10 +166,12 @@ class HourMeterReportController extends Controller
                     'Equipment Name',
                     'Model',
                     'Serial Number',
-                    'Kondisi',
                     'Hour Meter',
-                    'Tanggal Breakdown',
-                    'Detail Breakdown',
+                    'Part Number',
+                    'Part Name',
+                    'Qty',
+                    'Unit',
+                    'Note',
                 ]);
 
                 $number = 1;
@@ -176,21 +189,39 @@ class HourMeterReportController extends Controller
                         $detail->equipment?->brand ?? '',
                         $detail->equipment?->model ?? '',
                         $detail->equipment?->serial_number ?? '',
-                        strtoupper($detail->condition ?? ''),
                         $detail->new_hour_meter ?? '',
-                        $detail->created_at?->isoFormat('Y-MM-DD'),
-                        $detail->service_plan,
                     ];
 
-                    fputcsv($handle, $data);
+                    foreach ($detail->content as $contentIndex => $content) {
+                        if ($contentIndex == 0) {
+                            fputcsv($handle, [
+                                ...$data,
+                                $content->part_number ?? '',
+                                $content->part_name ?? '',
+                                $content->quantity ?? '',
+                                $content->unit ?? '',
+                                $content->note ?? '',
+                            ]);
+                        } else {
+                            fputcsv($handle, [
+                                '', '', '', '',
+                                '', '', '',
+                                $content->part_number ?? '',
+                                $content->part_name ?? '',
+                                $content->quantity ?? '',
+                                $content->unit ?? '',
+                                $content->note ?? '',
+                            ]);
+                        }
+                    }
                 }
-
                 fclose($handle);
+                exit;
             }, 200, $headers);
         } catch (\Throwable $throwable) {
             Log::error($throwable->getMessage());
-
-            return redirect()->route('report.hour-meter.index');
+            dd($throwable);
+            // return redirect()->route('report.hour-meter.index');
         }
     }
 }

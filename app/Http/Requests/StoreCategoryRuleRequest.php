@@ -22,10 +22,11 @@ class StoreCategoryRuleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'service_plan' => 'required',
+            'service_plan' => 'nullable',
             'min_value' => 'required|numeric|min:0',
             'max_value' => 'required|numeric|gt:min_value',
             'category_id' => 'required',
+            'content' => 'nullable',
         ];
     }
 }
