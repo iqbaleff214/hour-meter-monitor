@@ -24,7 +24,8 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Maksimum Hour Meter</th>
+                    <th>PM</th>
+                    <th>Range</th>
                     <th>Detail Servis</th>
                     @if(auth()->user()->isParent())
                     <th width="15px"></th>
@@ -35,6 +36,7 @@
                 @foreach ($rules as $rule)
                     <tr>
                         <td>{{ $rule->max_value }}</td>
+                        <td>{{ $rule->range_value }}</td>
                         <td>{{ $rule->service_plan }}</td>
                         @if(auth()->user()->isParent())
                         <td>

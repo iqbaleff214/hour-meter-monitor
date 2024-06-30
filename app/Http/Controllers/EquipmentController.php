@@ -123,7 +123,9 @@ class EquipmentController extends Controller
 
     public function search(Request $request): JsonResponse
     {
-        $result = Equipment::with(['subsidiary'])->owner($request->user())->search($request->query('q'))->get();
+        $result = Equipment::with([
+            'subsidiary', 'category', 'category.rules',
+            ])->owner($request->user())->search($request->query('q'))->get();
 
         return response()->json($result);
     }

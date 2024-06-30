@@ -23,7 +23,8 @@ class UpdateCategoryRuleRequest extends FormRequest
     {
         return [
             'service_plan' => 'required',
-            'max_value' => 'required|numeric|min:0',
+            'min_value' => 'required|numeric|min:0',
+            'max_value' => 'required|numeric|gt:min_value',
             'category_id' => 'required',
         ];
     }

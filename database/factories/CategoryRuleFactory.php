@@ -17,8 +17,11 @@ class CategoryRuleFactory extends Factory
      */
     public function definition(): array
     {
+        $min = mt_rand(0, 250);
+        $max = $min + mt_rand(50, 250);
         return [
-            'max_value' => mt_rand(0, 100),
+            'min_value' => $min,
+            'max_value' => $max,
             'service_plan' => fake()->sentence(3),
         ];
     }

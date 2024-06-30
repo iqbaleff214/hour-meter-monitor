@@ -98,14 +98,16 @@ class CategoryRuleController extends Controller
     public function rule(Request $request, Category $category): JsonResponse
     {
         $hourMeter = (int) ($request->query('hm') ?? 0);
-        $rules = $category->rules()->orderBy('max_value', 'asc')->get();
+        $rules = $category->rules()->orderBy('min_value', 'asc')->get();
 
         foreach ($rules as $rule) {
-            if ($hourMeter <= (int) $rule->max_value) {
+            if ($hourMeter >= (int) $rule->min_value && $hourMeter <= (int) $rule->max_value) {
                 return response()->json($rule);
             }
         }
 
-        return response()->json($rules[count($rules)-1]);
+        return response()->json([
+            'service_plan' => '',
+        ]);
     }
 }

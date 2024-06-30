@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,8 +13,19 @@ class CategoryRule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id', 'max_value', 'service_plan',
+        'category_id', 'min_value', 'max_value', 'service_plan',
     ];
+
+    protected $appends = [
+        'range_value',
+    ];
+
+    public function rangeValue(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->min_value . '-' . $this->max_value,
+        );
+    }
 
     public function category(): BelongsTo
     {
@@ -29,6 +41,6 @@ class CategoryRule extends Model
 
     public function scopeRender(Builder $query, int $page)
     {
-        return $query->orderBy('max_value', 'asc')->paginate($page)->withQueryString();
+        return $query->orderBy('min_value', 'asc')->paginate($page)->withQueryString();
     }
 }

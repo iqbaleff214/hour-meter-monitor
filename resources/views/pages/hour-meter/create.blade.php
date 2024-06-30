@@ -90,15 +90,16 @@
             }
         });
 
-        $('#equipment-wrapper').on('change', 'input.new-hour-meter', function (e) {
+        function getDetailServiceFromHourMeter (e) {
             const index = e.target.dataset.index;
             const categoryId = selected[index].category_id;
-
             fetch(`/category/${categoryId}/rule-search?hm=${e.target.value}`).then(res => res.json()).then(res => {
                 $('input[name="service_plan[' + index + ']"]').val(res?.service_plan);
             });
+        }
 
-        })
+        $('#equipment-wrapper').on('change', 'input.new-hour-meter', getDetailServiceFromHourMeter);
+        $('#equipment-wrapper').on('keyup', 'input.new-hour-meter', getDetailServiceFromHourMeter);
 
         submitEquipmentInput.addEventListener('click', function (e) {
             equipmentWrapper.innerHTML = '';
