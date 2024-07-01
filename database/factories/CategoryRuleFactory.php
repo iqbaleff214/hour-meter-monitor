@@ -23,6 +23,15 @@ class CategoryRuleFactory extends Factory
             'min_value' => $min,
             'max_value' => $max,
             'service_plan' => fake()->sentence(3),
+            'content' => [
+                [
+                    'part_number' => fake()->localIpv4(),
+                    'part_name' => fake()->sentence(3),
+                    'quantity' => fake()->randomDigit(),
+                    'unit' => fake()->word(),
+                    'note' => fake()->sentence(5),
+                ],
+            ],
         ];
     }
 }

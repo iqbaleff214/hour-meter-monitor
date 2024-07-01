@@ -101,6 +101,20 @@ class PageController extends Controller
             $totalEquipment = [(object)['brand' => '-', 'total' => 0], (object)['brand' => '-', 'total' => 0], (object)['brand' => '-', 'total' => 0],];
         }
 
+        $equipmentService = Equipment::owner($request->user())->with(['categoryRules'])->get();
+        $equipmentForService = [];
+        foreach ($equipmentService as $eq) {
+            $currentHM = $eq->initial_hour_meter + ((int) $eq->created_at->diffInDays(now()) * 7);
+
+            foreach ($eq->categoryRules as $rule) {
+                if ($currentHM >= (int) $rule->min_value && $currentHM <= (int) $rule->max_value) {
+                    $eq->pm = $rule->max_value;
+                    $eq->calculate_hm = $currentHM;
+                    $equipmentForService[] = $eq;
+                }
+            }
+        }
+
         return view('pages.dashboard', [
             'submitted' => HourMeterReport::query()->availableToday($request->user()),
             'chart' => [
@@ -111,6 +125,7 @@ class PageController extends Controller
                 'top3' => $totalEquipment,
                 'other' => $otherEquipment,
             ],
+            'pm' => $equipmentForService,
         ]);
     }
 

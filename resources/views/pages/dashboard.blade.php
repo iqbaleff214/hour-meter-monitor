@@ -111,6 +111,35 @@
         </div>
         <!--/ Total Revenue -->
     </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card h-100">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="card-title m-0 me-2">PM Unit Peralatan</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach ($pm as $equipment)
+                        <div class="col-12 col-sm-6 col-md-4 mb-4 pb-1">
+                            <div class="w-100 align-items-center justify-content-between">
+                                <div class="d-flex justify-content-between">
+                                    <a class="fw-semibold" href="{{ route('equipment.show', $equipment) }}">{{ $equipment->code }}</a>
+                                    <small>
+                                        <abbr title="Perkiraan Hari Ini">{{ $equipment->calculate_hm }} HM</abbr>
+                                    </small>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div>SN. {{ $equipment->serial_number }}</div>
+                                    <small>PM {{ $equipment->pm }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('style')

@@ -21,6 +21,19 @@ class Equipment extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function categoryRules()
+    {
+        return $this->hasManyThrough(CategoryRule::class, Category::class, 'id', 'category_id', 'category_id', 'id');
+            // ->whereHas('category', function ($query) {
+            //     $query->whereRaw('(equipment.initial_hour_meter) >= category_rules.min_value')
+            //         ->whereRaw('(equipment.initial_hour_meter) <= category_rules.max_value');
+            // });
+            // ->whereRaw('? >= category_rules.min_value', [$todayHM])
+            // ->whereRaw('? <= category_rules.max_value', [$todayHM]);
+            // ->whereRaw('(equipment.initial_hour_meter + (7 * DATEDIFF(equipment.created_at, NOW())) >= category_rules.min_value')
+            // ->whereRaw('(equipment.initial_hour_meter + (7 * DATEDIFF(equipment.created_at, NOW())) <= category_rules.max_value');
+    }
+
     public function subsidiary(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
