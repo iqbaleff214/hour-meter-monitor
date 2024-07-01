@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PageController extends Controller
@@ -21,14 +22,26 @@ class PageController extends Controller
     public function dashboard(Request $request): View
     {
         $start7DaysAgo = now()->subDays(6);
-        $reportLast7Days = HourMeterReportDetail::whereHas('report', function (Builder $query) use ($request) {
+
+        $pmLast7Days = HourMeterReportDetail::whereHas('report', function (Builder $query) use ($request) {
+            return $query->when($request->user()->isSubsidiary(), function (Builder $query) use ($request) {
+                return $query->where('user_id', $request->user()->id);
+            });
+        })->selectRaw('DISTINCT preventive_maintenance_hour_meter')
+            ->orderBy('preventive_maintenance_hour_meter')
+            ->get()
+            ->pluck('preventive_maintenance_hour_meter');
+        $reportLast7DaysQuery = HourMeterReportDetail::whereHas('report', function (Builder $query) use ($request) {
             return $query->when($request->user()->isSubsidiary(), function (Builder $query) use ($request) {
                 return $query->where('user_id', $request->user()->id);
             });
         })->whereDate('created_at', '>=', $start7DaysAgo)
-            ->selectRaw("DATE(created_at) as date, COUNT(equipment_id) as total, COUNT(CASE WHEN `condition`='ready' THEN 1 END) as ready, COUNT(CASE WHEN `condition`='breakdown' THEN 1 END) as breakdown")
-            ->groupByRaw('DATE(created_at)')
-            ->get();
+            ->selectRaw("DATE(created_at) as date")
+            ->groupByRaw('DATE(created_at)');
+        foreach ($pmLast7Days as $pm) {
+            $reportLast7DaysQuery->addSelect(DB::raw("SUM(CASE WHEN preventive_maintenance_hour_meter = {$pm} THEN 1 ELSE 0 END) AS `pm_{$pm}`"));
+        }
+        $reportLast7Days = $reportLast7DaysQuery->get();
         $reportPreviousWeek = HourMeterReportDetail::whereHas('report', function (Builder $query) use ($request) {
             return $query->when($request->user()->isSubsidiary(), function (Builder $query) use ($request) {
                 return $query->where('user_id', $request->user()->id);
@@ -52,12 +65,15 @@ class PageController extends Controller
         ];
 
         $formattedReportConditionLast7Days = [
-            'series' => [
-                ['name' => 'READY', 'data' => []],
-                ['name' => 'BREAKDOWN', 'data' => []],
-            ],
+            'series' => [],
             'categories' => [],
         ];
+        foreach ($pmLast7Days as $pm) {
+            $formattedReportConditionLast7Days['series'][] = [
+                'name' => 'PM ' . $pm,
+                'data' => [],
+            ];
+        }
 
         foreach (CarbonPeriod::create($start7DaysAgo, now()) as $date) {
             $dateMonth = $date->format('d M');
@@ -67,8 +83,9 @@ class PageController extends Controller
             $formattedReportLast7Days['total'] += isset($mappedReportLast7Days[$dateMonth]) ? (int)$mappedReportLast7Days[$dateMonth]->total : 0;
 
             $formattedReportConditionLast7Days['categories'][] = $dateMonth;
-            $formattedReportConditionLast7Days['series'][0]['data'][] = isset($mappedReportLast7Days[$dateMonth]) ? (int)$mappedReportLast7Days[$dateMonth]->ready : 0;
-            $formattedReportConditionLast7Days['series'][1]['data'][] = isset($mappedReportLast7Days[$dateMonth]) ? (int)$mappedReportLast7Days[$dateMonth]->breakdown : 0;
+            foreach ($pmLast7Days as $i => $pm) {
+                $formattedReportConditionLast7Days['series'][$i]['data'][] = isset($mappedReportLast7Days[$dateMonth]) ? $mappedReportLast7Days[$dateMonth]->{'pm_' . $pm} : 0;
+            }
         }
         $formattedReportLast7Days['totalIncrement'] = $this->incrementPercentage($reportPreviousWeek, $formattedReportLast7Days['total']);
 

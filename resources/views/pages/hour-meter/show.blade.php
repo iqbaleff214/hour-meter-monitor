@@ -23,6 +23,7 @@
                     <th>Kode Unit</th>
                     <th>Model</th>
                     <th>HM</th>
+                    <th>PM</th>
                     <th>Part Number</th>
                     <th>Part Name</th>
                     <th>Qty</th>
@@ -45,6 +46,7 @@
                                 {{ $report->equipment?->model }}
                             </td>
                             <td rowspan="{{ count($report->content) }}">{{ $report->new_hour_meter }}</td>
+                            <td rowspan="{{ count($report->content) }}">{{ $report->preventive_maintenance_hour_meter }}</td>
                             @endif
                             <td>{{ $content->part_number ?? '-' }}</td>
                             <td>{{ $content->part_name ?? '-' }}</td>

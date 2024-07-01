@@ -60,6 +60,8 @@ class HourMeterReportController extends Controller
             $equipments = $request->input('equipment_id');
             $hourMeters = $request->input('new_hour_meter');
             $contents = $request->input('content');
+            $rules = $request->input('category_rules_id');
+            $pm = $request->input('preventive_maintenance_hour_meter');
 
             $reportDetail = [];
             for ($i = 0; $i < count($equipments); $i++) {
@@ -83,6 +85,8 @@ class HourMeterReportController extends Controller
                     'content' => json_encode($currentContent),
                     'created_at' => now(),
                     'updated_at' => now(),
+                    'category_rules_id' => $rules[$i] ?? null,
+                    'preventive_maintenance_hour_meter' => $pm[$i] ?? null,
                     'service_plan' => 'content',
                 ];
             }
@@ -167,6 +171,7 @@ class HourMeterReportController extends Controller
                     'Model',
                     'Serial Number',
                     'Hour Meter',
+                    'PM',
                     'Part Number',
                     'Part Name',
                     'Qty',
@@ -190,6 +195,7 @@ class HourMeterReportController extends Controller
                         $detail->equipment?->model ?? '',
                         $detail->equipment?->serial_number ?? '',
                         $detail->new_hour_meter ?? '',
+                        $detail->preventive_maintenance_hour_meter ?? '',
                     ];
 
                     foreach ($detail->content as $contentIndex => $content) {
@@ -205,7 +211,7 @@ class HourMeterReportController extends Controller
                         } else {
                             fputcsv($handle, [
                                 '', '', '', '',
-                                '', '', '',
+                                '', '', '', '',
                                 $content->part_number ?? '',
                                 $content->part_name ?? '',
                                 $content->quantity ?? '',

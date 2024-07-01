@@ -7,6 +7,18 @@
 (function () {
     let cardColor, headingColor, axisColor, shadeColor, borderColor;
 
+    const generateColorArray = (size) => {
+        const values = Object.values(config.colors);
+        const randomValues = [];
+
+        for (let i = 0; i < size; i++) {
+            const randomIndex = Math.floor(Math.random() * values.length);
+            randomValues.push(values[randomIndex]);
+        }
+
+        return randomValues;
+    };
+
     cardColor = config.colors.cardColor;
     headingColor = config.colors.headingColor;
     axisColor = config.colors.axisColor;
@@ -33,7 +45,7 @@
                     endingShape: 'rounded'
                 }
             },
-            colors: [config.colors.success, config.colors.danger],
+            colors: generateColorArray(conditionReportChartJson.series?.length),
             dataLabels: {
                 enabled: false
             },

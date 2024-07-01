@@ -94,7 +94,11 @@
             const index = e.target.dataset.index;
             const categoryId = selected[index].category_id;
             fetch(`/category/${categoryId}/rule-search?hm=${e.target.value}`).then(res => res.json()).then(res => {
-                let plans = '';
+                let plans = `
+                    <input type="hidden" name="category_rules_id[${index}]" value="${res?.id}" />
+                    <input type="hidden" name="preventive_maintenance_hour_meter[${index}]" value="${res?.max_value}" />
+                    `;
+
                 res.content?.forEach((content, countService) => {
                     plans += `
                         <div class="mb-3 col-12 col-md-3">
